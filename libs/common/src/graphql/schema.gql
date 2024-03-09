@@ -62,7 +62,7 @@ type Mutation {
 }
 
 type Query {
-  gig(id: String!): Gig!
+  gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
 }
 

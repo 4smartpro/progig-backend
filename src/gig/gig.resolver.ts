@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { GigService } from './gig.service';
 import { Gig } from './entities/gig.entity';
 import { CreateGigInput } from './dto/create-gig.input';
@@ -23,8 +23,8 @@ export class GigResolver {
     return this.gigService.findAll({ page, limit, searchText });
   }
 
-  @Query(() => Gig, { name: 'gig' })
-  findOne(@Args('id') id: string) {
+  @Query(() => Gig, { name: 'gig', nullable: true })
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.gigService.findOne(id);
   }
 
