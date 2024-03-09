@@ -1,0 +1,120 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateGigInput {
+  budget: Float!
+  contractorId: String!
+
+  """Mandatory Field"""
+  deadline: DateTime!
+
+  """Mandatory Field"""
+  description: String!
+  image: String
+  jobType: String
+  location: String
+  paymentMethod: String
+  requirements: String
+
+  """Mandatory Field"""
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Gig {
+  budget: Float
+  contractorId: String!
+  created_at: DateTime!
+  deadline: DateTime
+  description: String!
+  id: ID!
+  image: String
+  jobType: String
+  location: String
+  paymentMethod: String
+  requirements: String
+  status: String!
+  title: String!
+  updated_at: DateTime!
+}
+
+type GigsResponse {
+  entries: [Gig!]!
+  total: Float!
+}
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
+type Mutation {
+  createGig(createGigInput: CreateGigInput!): Gig!
+  login(email: String!, password: String!): LoginResponse!
+  register(payload: RegistrationInput!): RegistrationResponse!
+  removeGig(id: String!): Gig!
+  updateGig(updateGigInput: UpdateGigInput!): Gig!
+}
+
+type Query {
+  gig(id: String!): Gig!
+  gigs(limit: Int, page: Int, searchText: String): GigsResponse!
+}
+
+input RegistrationInput {
+  email: String!
+  firstname: String!
+  lastname: String!
+  password: String!
+  role: UserRole!
+}
+
+type RegistrationResponse {
+  message: String!
+  user: User!
+}
+
+input UpdateGigInput {
+  budget: Float
+  contractorId: String
+
+  """Mandatory Field"""
+  deadline: DateTime
+
+  """Mandatory Field"""
+  description: String
+  id: Int!
+  image: String
+  jobType: String
+  location: String
+  paymentMethod: String
+  requirements: String
+
+  """Mandatory Field"""
+  title: String
+}
+
+type User {
+  bio: String!
+  created_at: DateTime!
+  email: String!
+  firstname: String
+  id: ID!
+  isEmailVerified: Boolean!
+  lastname: String!
+  location: String!
+  profilePicture: String!
+  role: String!
+  updated_at: DateTime!
+}
+
+enum UserRole {
+  ADMIN
+  CONTRACTOR
+  HELPER
+}

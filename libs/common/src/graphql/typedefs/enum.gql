@@ -1,0 +1,44 @@
+# -------------------------------------- #
+# --------------- ENUM ----------------- #
+# -------------------------------------- #
+
+enum UserRole {
+  ADMIN
+  CONTRACTOR
+  HELPER
+}
+
+enum UserStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+enum PermitStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+enum GENDER {
+  male
+  female
+  both
+}
+
+enum FormInputType {
+  text
+  textarea
+  select
+  date
+  file
+  radio
+  checkbox
+  multicheck
+  data
+  time
+  daterange
+  esign
+  map
+  freetext
+}

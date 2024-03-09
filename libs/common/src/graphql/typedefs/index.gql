@@ -1,0 +1,21 @@
+type Query {
+  ##################### USERS #######################
+
+  ######################## CLIENTS ############################
+  testQuery(limit: Int, offset: Int): String
+}
+
+# -------------------------------------- #
+# ------------- MUTATION --------------- #
+# -------------------------------------- #
+
+type Mutation {
+  ##################### GENERIC MUTATION #####################
+  # SingleUpload(file: Upload!): SingleFile
+  # MultipleUpload(files: [Upload!]): MultipleFile
+  # DeleteFile(filename: String!): DefaultResponse
+
+  ##################### AUTHENTICATION #######################
+  Login(email: String!, password: String!): LoginResponse
+  Register(data: RegistrationInput): RegistrationResponse
+}

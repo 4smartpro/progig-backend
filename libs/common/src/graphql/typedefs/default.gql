@@ -1,0 +1,20 @@
+type DefaultResponse {
+  code: String
+  success: Boolean
+  message: String
+}
+
+type SingleFile {
+  filename: String
+  url: String
+  success: Boolean
+  message: String
+  code: String
+}
+
+type MultipleFile {
+  message: String
+  success: Boolean
+  code: String
+  files: [SingleFile]
+}

@@ -1,0 +1,3 @@
+  directive @isAuthenticated(role: [String]) on FIELD_DEFINITION
+  # directive @isAdmin on FIELD_DEFINITION
+  directive @isSuperAdmin on FIELD_DEFINITION
