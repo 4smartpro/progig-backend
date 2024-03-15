@@ -33,11 +33,7 @@ export class DatabaseModule {
           useFactory: (configService: ConfigService) => {
             return {
               type: 'mysql',
-              host: configService.get('POSTGRES_HOST'),
-              port: configService.get('POSTGRES_PORT'),
-              username: configService.get('POSTGRES_USER'),
-              password: configService.get('POSTGRES_PASSWORD'),
-              database: configService.get('POSTGRES_DB'),
+              url: configService.get('MYSQL_DATABASE_URL'),
               logging: false,
               synchronize: true,
               migrations: getMigragions(),

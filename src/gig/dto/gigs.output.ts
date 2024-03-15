@@ -1,11 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Gig } from '../entities/gig.entity';
+import { Gig } from '@app/common';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class GigsResponse {
   @Field(() => [Gig])
   entries: Gig[];
 
-  @Field()
+  @Field(() => Int)
   total: number;
 }

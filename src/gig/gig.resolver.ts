@@ -1,9 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { GigService } from './gig.service';
-import { Gig } from './entities/gig.entity';
 import { CreateGigInput } from './dto/create-gig.input';
 import { UpdateGigInput } from './dto/update-gig.input';
 import { GigsResponse } from './dto/gigs.output';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { CurrentUser, Gig, User } from '@app/common';
 
 @Resolver(() => Gig)
 export class GigResolver {
@@ -15,6 +17,7 @@ export class GigResolver {
   }
 
   @Query(() => GigsResponse, { name: 'gigs' })
+  @UseGuards(JwtAuthGuard)
   findAll(
     @Args('page', { nullable: true, type: () => Int }) page?: number,
     @Args('limit', { nullable: true, type: () => Int }) limit?: number,

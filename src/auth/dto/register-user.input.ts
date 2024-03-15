@@ -1,6 +1,6 @@
+import { UserRole } from '@app/common';
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, MinLength } from 'class-validator';
-import { UserRole } from 'src/user/entities/user.entity';
 
 @InputType()
 export class RegistrationInput {

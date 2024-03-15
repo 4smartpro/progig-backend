@@ -1,11 +1,17 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  GqlExecutionContext,
+  GraphQLExecutionContext,
+  Mutation,
+  Resolver,
+} from '@nestjs/graphql';
 import { LocalAuthGuard } from './guards/local.guard';
 import { LoginResponse, RegistrationResponse } from './dto/auth.response';
 import { AuthService } from './auth.service';
-import { CurrentUser } from 'src/user/user.decorator';
-import { User } from 'src/user/entities/user.entity';
 import { RegistrationInput } from './dto/register-user.input';
+import { CurrentUser, User } from '@app/common';
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private authService: AuthService) {}

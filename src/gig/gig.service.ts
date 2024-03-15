@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateGigInput } from './dto/create-gig.input';
 import { UpdateGigInput } from './dto/update-gig.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Gig } from './entities/gig.entity';
 import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.output';
+import { Gig } from '@app/common';
 
 @Injectable()
 export class GigService {
@@ -21,7 +21,6 @@ export class GigService {
     limit: number;
     page: number;
   }): Promise<GigsResponse> {
-    console.log(params);
     const [entries, total] = await this.gigRepository.findAndCount({
       where: {
         description: ILike(`%${params.searchText}%`),

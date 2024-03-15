@@ -1,8 +1,7 @@
 import { Entity, Column, BeforeInsert } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { AbstractEntity } from '@app/common';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { AbstractEntity } from '../abstract.entity';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -30,19 +29,23 @@ export class User extends AbstractEntity {
   @Column()
   password: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   location: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   bio: string;
 
-  @Field()
-  @Column({ enum: UserRole })
-  role: string;
+  @Field(() => UserRole)
+  @Column({
+    default: UserRole.HELPER,
+    enum: UserRole,
+    type: 'enum',
+  })
+  role: UserRole;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   profilePicture: string;
 

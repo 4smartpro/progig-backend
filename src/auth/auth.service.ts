@@ -7,9 +7,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { RegistrationInput } from './dto/register-user.input';
+import { User } from '@app/common';
 
 export interface TokenPayload {
   userId: string;

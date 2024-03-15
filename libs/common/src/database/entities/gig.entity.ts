@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@app/common';
-import { User } from 'src/user/entities/user.entity';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { User } from './user.entity';
 
 export enum GigStatus {
   OPEN = 'OPEN',
@@ -26,11 +26,11 @@ export class Gig extends AbstractEntity {
   budget: number;
 
   @Field(() => Date, { nullable: true })
-  @Column()
+  @Column({ nullable: true, type: 'date' })
   deadline: Date;
 
-  @Field({ defaultValue: GigStatus.OPEN })
-  @Column({ default: GigStatus.OPEN })
+  @Field()
+  @Column({ default: GigStatus.OPEN, type: 'enum', enum: GigStatus })
   status: GigStatus;
 
   @Field({ nullable: true })

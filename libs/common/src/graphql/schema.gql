@@ -2,6 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Connection {
+  created_at: DateTime!
+  follower: User
+  followerId: String!
+  following: User
+  followingId: String!
+  id: ID!
+  status: String!
+  updated_at: DateTime!
+}
+
+type ConnectionsResponse {
+  entries: [Connection!]!
+  total: Int!
+}
+
 input CreateGigInput {
   budget: Float!
   contractorId: String!
@@ -45,7 +61,7 @@ type Gig {
 
 type GigsResponse {
   entries: [Gig!]!
-  total: Float!
+  total: Int!
 }
 
 type LoginResponse {
@@ -54,14 +70,18 @@ type LoginResponse {
 }
 
 type Mutation {
+  acceptConnectionRequest(id: ID!): Connection!
   createGig(createGigInput: CreateGigInput!): Gig!
+  deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
   register(payload: RegistrationInput!): RegistrationResponse!
   removeGig(id: String!): Gig!
+  sendConnectionRequest(followingId: ID!): Connection!
   updateGig(updateGigInput: UpdateGigInput!): Gig!
 }
 
 type Query {
+  connections(limit: Int, page: Int, searchText: String): ConnectionsResponse!
   gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
 }
@@ -100,16 +120,16 @@ input UpdateGigInput {
 }
 
 type User {
-  bio: String!
+  bio: String
   created_at: DateTime!
   email: String!
   firstname: String
   id: ID!
   isEmailVerified: Boolean!
   lastname: String!
-  location: String!
-  profilePicture: String!
-  role: String!
+  location: String
+  profilePicture: String
+  role: UserRole!
   updated_at: DateTime!
 }
 
