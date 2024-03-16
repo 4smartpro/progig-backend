@@ -12,8 +12,12 @@ export class GigResolver {
   constructor(private readonly gigService: GigService) {}
 
   @Mutation(() => Gig)
-  createGig(@Args('createGigInput') createGigInput: CreateGigInput) {
-    return this.gigService.create(createGigInput);
+  @UseGuards(JwtAuthGuard)
+  createGig(
+    @Args('createGigInput') createGigInput: CreateGigInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.create(createGigInput, user);
   }
 
   @Query(() => GigsResponse, { name: 'gigs' })

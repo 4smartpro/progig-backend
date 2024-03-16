@@ -28,7 +28,4 @@ export class CreateGigInput {
 
   @Field({ nullable: true })
   image: string;
-
-  @Field({})
-  contractorId: string;
 }

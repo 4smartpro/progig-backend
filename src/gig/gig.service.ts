@@ -4,7 +4,7 @@ import { UpdateGigInput } from './dto/update-gig.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.output';
-import { Gig } from '@app/common';
+import { Gig, User } from '@app/common';
 
 @Injectable()
 export class GigService {
@@ -12,8 +12,10 @@ export class GigService {
     @InjectRepository(Gig) private readonly gigRepository: Repository<Gig>,
   ) {}
 
-  async create(createGigInput: CreateGigInput) {
-    return this.gigRepository.create(createGigInput).save();
+  async create(createGigInput: CreateGigInput, user: User) {
+    return this.gigRepository
+      .create({ ...createGigInput, contractorId: user.id })
+      .save();
   }
 
   async findAll(params: {
