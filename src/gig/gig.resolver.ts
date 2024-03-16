@@ -4,8 +4,8 @@ import { CreateGigInput } from './dto/create-gig.input';
 import { UpdateGigInput } from './dto/update-gig.input';
 import { GigsResponse } from './dto/gigs.output';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CurrentUser, Gig, User } from '@app/common';
+import { JwtAuthGuard } from '@auth/guards';
 
 @Resolver(() => Gig)
 export class GigResolver {

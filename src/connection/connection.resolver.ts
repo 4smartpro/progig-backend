@@ -2,8 +2,8 @@ import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ConnectionService } from './connection.service';
 import { Connection, CurrentUser, User } from '@app/common';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ConnectionsResponse } from './dto/connection.dto';
+import { JwtAuthGuard } from '@auth/guards';
 
 @Resolver(() => Connection)
 export class ConnectionResolver {
