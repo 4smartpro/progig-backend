@@ -1,7 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { AbstractEntity } from '../abstract.entity';
-import { Field, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User } from './user.entity';
+import { Message } from './message.entity';
 
 export enum ChatUserRole {
   ADMIN = 'ADMIN',
@@ -10,16 +18,9 @@ export enum ChatUserRole {
 
 registerEnumType(ChatUserRole, { name: 'ChatUserRole' });
 
+@ObjectType()
 @Entity()
 export class Chat extends AbstractEntity {
-  @Field()
-  @Column()
-  title: string;
-
-  @Field()
-  @Column({ default: false })
-  isGroup: boolean;
-
   @Field(() => [ChatUser])
   @OneToMany(() => ChatUser, (s) => s.chatId)
   users: ChatUser[];
@@ -27,8 +28,15 @@ export class Chat extends AbstractEntity {
   @Field(() => [Message])
   @OneToMany(() => Message, (s) => s.chatId)
   conversation: Message[];
+
+  @Field()
+  @OneToOne(() => Message)
+  @JoinColumn({ name: 'lastMessageId' })
+  lastMessage: Message;
 }
 
+@ObjectType()
+@Entity()
 export class ChatUser extends AbstractEntity {
   @Field()
   @Column()
@@ -51,19 +59,4 @@ export class ChatUser extends AbstractEntity {
   @Field()
   @Column({ type: 'enum', enum: ChatUserRole, default: ChatUserRole.ADMIN })
   role: ChatUserRole;
-}
-
-export class Message extends AbstractEntity {
-  @Field()
-  @Column()
-  message: string;
-
-  @Field()
-  @Column()
-  chatId: string;
-
-  @Field()
-  @ManyToOne(() => Chat, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'chatId' })
-  chat: Chat;
 }

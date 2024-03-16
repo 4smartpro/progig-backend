@@ -2,6 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Chat {
+  conversation: [Message!]!
+  created_at: DateTime!
+  id: ID!
+  lastMessage: Message!
+  updated_at: DateTime!
+  users: [ChatUser!]!
+}
+
+type ChatUser {
+  chat: Chat!
+  chatId: String!
+  created_at: DateTime!
+  id: ID!
+  role: String!
+  updated_at: DateTime!
+  user: User!
+  userId: String!
+}
+
 type Connection {
   created_at: DateTime!
   follower: User
@@ -66,6 +86,18 @@ type GigsResponse {
 type LoginResponse {
   accessToken: String!
   user: User!
+}
+
+type Message {
+  chat: Chat!
+  chatId: String!
+  created_at: DateTime!
+  id: ID!
+  message: String!
+  seen: Boolean!
+  sender: User!
+  senderId: String!
+  updated_at: DateTime!
 }
 
 type Mutation {
