@@ -31,6 +31,10 @@ export class Connection extends AbstractEntity {
   following: User;
 
   @Field()
-  @Column({ enum: ConnectionStatus, default: ConnectionStatus.PENDING })
+  @Column({
+    enum: ConnectionStatus,
+    default: ConnectionStatus.PENDING,
+    type: 'enum',
+  })
   status: ConnectionStatus;
 }

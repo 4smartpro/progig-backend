@@ -20,7 +20,6 @@ type ConnectionsResponse {
 
 input CreateGigInput {
   budget: Float!
-  contractorId: String!
 
   """Mandatory Field"""
   deadline: DateTime!
@@ -101,7 +100,6 @@ type RegistrationResponse {
 
 input UpdateGigInput {
   budget: Float
-  contractorId: String
 
   """Mandatory Field"""
   deadline: DateTime
