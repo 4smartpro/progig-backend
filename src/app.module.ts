@@ -6,6 +6,7 @@ import { GigModule } from './gig/gig.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConnectionModule } from './connection/connection.module';
 import * as Joi from 'joi';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import * as Joi from 'joi';
     UserModule,
     GigModule,
     ConnectionModule,
+    ChatModule,
   ],
 })
 export class AppModule {}

@@ -3,39 +3,51 @@
 # ------------------------------------------------------
 
 type Chat {
-  conversation: [Message!]!
-  created_at: DateTime!
+  conversations: [Message!]!
+  createdAt: DateTime!
   id: ID!
-  lastMessage: Message!
-  updated_at: DateTime!
-  users: [ChatUser!]!
+  lastMessage: Message
+  lastMessageId: String
+  receiver: User
+  receiverId: String
+  sender: User
+  senderId: String
+  updatedAt: DateTime!
 }
 
-type ChatUser {
-  chat: Chat!
-  chatId: String!
-  created_at: DateTime!
-  id: ID!
-  role: String!
-  updated_at: DateTime!
-  user: User!
-  userId: String!
+type ChatsResponse {
+  entries: [Chat!]!
+  total: Int!
 }
 
 type Connection {
-  created_at: DateTime!
+  createdAt: DateTime!
   follower: User
   followerId: String!
   following: User
   followingId: String!
   id: ID!
   status: String!
-  updated_at: DateTime!
+  updatedAt: DateTime!
 }
 
 type ConnectionsResponse {
   entries: [Connection!]!
   total: Int!
+}
+
+type ConversationsResponse {
+  entries: [Message!]!
+  total: Int!
+}
+
+input CreateChatInput {
+  """Chat ID (Optional)"""
+  chatId: ID
+  message: String!
+
+  """Receiver ID (Optional)"""
+  receiverId: ID
 }
 
 input CreateGigInput {
@@ -64,7 +76,7 @@ scalar DateTime
 type Gig {
   budget: Float
   contractorId: String!
-  created_at: DateTime!
+  createdAt: DateTime!
   deadline: DateTime
   description: String!
   id: ID!
@@ -75,7 +87,7 @@ type Gig {
   requirements: String
   status: String!
   title: String!
-  updated_at: DateTime!
+  updatedAt: DateTime!
 }
 
 type GigsResponse {
@@ -89,15 +101,15 @@ type LoginResponse {
 }
 
 type Message {
-  chat: Chat!
+  chat: Chat
   chatId: String!
-  created_at: DateTime!
+  createdAt: DateTime!
   id: ID!
-  message: String!
+  message: String
   seen: Boolean!
-  sender: User!
+  sender: User
   senderId: String!
-  updated_at: DateTime!
+  updatedAt: DateTime!
 }
 
 type Mutation {
@@ -108,11 +120,14 @@ type Mutation {
   register(payload: RegistrationInput!): RegistrationResponse!
   removeGig(id: String!): Gig!
   sendConnectionRequest(followingId: ID!): Connection!
+  sendMessage(payload: CreateChatInput!): Chat!
   updateGig(updateGigInput: UpdateGigInput!): Gig!
 }
 
 type Query {
+  chats(limit: Int, page: Int, searchText: String): ChatsResponse!
   connections(limit: Int, page: Int, searchText: String): ConnectionsResponse!
+  conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
 }
@@ -128,6 +143,10 @@ input RegistrationInput {
 type RegistrationResponse {
   message: String!
   user: User!
+}
+
+type Subscription {
+  messageAdded(chatId: ID!): Message!
 }
 
 input UpdateGigInput {
@@ -151,7 +170,7 @@ input UpdateGigInput {
 
 type User {
   bio: String
-  created_at: DateTime!
+  createdAt: DateTime!
   email: String!
   firstname: String
   id: ID!
@@ -160,7 +179,7 @@ type User {
   location: String
   profilePicture: String
   role: UserRole!
-  updated_at: DateTime!
+  updatedAt: DateTime!
 }
 
 enum UserRole {

@@ -10,6 +10,10 @@ import { join } from 'path';
       playground: true,
       autoSchemaFile: join(process.cwd(), 'libs/common/src/graphql/schema.gql'),
       sortSchema: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
   ],
 })

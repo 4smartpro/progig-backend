@@ -19,7 +19,7 @@ export class AbstractEntity extends BaseEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  created_at: Date;
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn({
@@ -27,5 +27,5 @@ export class AbstractEntity extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updated_at: Date;
+  updatedAt: Date;
 }

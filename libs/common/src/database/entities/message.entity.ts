@@ -7,7 +7,7 @@ import { User } from './user.entity';
 @ObjectType()
 @Entity()
 export class Message extends AbstractEntity {
-  @Field()
+  @Field({ nullable: true })
   @Column()
   message: string;
 
@@ -19,7 +19,7 @@ export class Message extends AbstractEntity {
   @Column()
   senderId: string;
 
-  @Field()
+  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'senderId' })
   sender: User;
@@ -28,7 +28,7 @@ export class Message extends AbstractEntity {
   @Column()
   chatId: string;
 
-  @Field(() => Chat)
+  @Field(() => Chat, { nullable: true })
   @ManyToOne(() => Chat, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;

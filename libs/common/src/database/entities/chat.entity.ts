@@ -21,16 +21,34 @@ registerEnumType(ChatUserRole, { name: 'ChatUserRole' });
 @ObjectType()
 @Entity()
 export class Chat extends AbstractEntity {
-  @Field(() => [ChatUser])
-  @OneToMany(() => ChatUser, (s) => s.chatId)
-  users: ChatUser[];
+  @Field({ nullable: true })
+  @Column()
+  senderId: string;
 
-  @Field(() => [Message])
-  @OneToMany(() => Message, (s) => s.chatId)
-  conversation: Message[];
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'senderId' })
+  sender: User;
 
-  @Field()
-  @OneToOne(() => Message)
+  @Field({ nullable: true })
+  @Column()
+  receiverId: string;
+
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'receiverId' })
+  receiver: User;
+
+  @Field(() => [Message], { defaultValue: [] })
+  @OneToMany(() => Message, (s) => s.chat)
+  conversations: Message[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  lastMessageId: string;
+
+  @Field(() => Message, { nullable: true })
+  @OneToOne(() => Message, (s) => s.chat)
   @JoinColumn({ name: 'lastMessageId' })
   lastMessage: Message;
 }
@@ -42,7 +60,7 @@ export class ChatUser extends AbstractEntity {
   @Column()
   chatId: string;
 
-  @Field()
+  @Field(() => Chat, { nullable: true })
   @ManyToOne(() => Chat, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;
@@ -51,12 +69,12 @@ export class ChatUser extends AbstractEntity {
   @Column()
   userId: string;
 
-  @Field()
+  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Field()
+  @Field(() => ChatUserRole)
   @Column({ type: 'enum', enum: ChatUserRole, default: ChatUserRole.ADMIN })
   role: ChatUserRole;
 }

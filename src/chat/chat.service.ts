@@ -4,37 +4,85 @@ import { UpdateChatInput } from './dto/update-chat.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Chat, ChatUser, Message, User } from '@app/common';
 import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
+import { ChatsResponse } from './dto/chat.dto';
+import { ConversationsResponse } from './dto/message.dto';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectRepository(Chat)
     private readonly chatRepository: Repository<Chat>,
-    private readonly chatUserRepository: Repository<ChatUser>,
+
+    @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
+
+    private readonly userService: UserService,
   ) {}
 
-  async create(payload: CreateChatInput, user: User) {
-    const chat = await this.chatRepository.create({});
-    const users = await this.chatUserRepository.insert([
-      {
-        chatId: chat.id,
-        userId: payload.receiverId,
-      },
-      {
-        chatId: chat.id,
-        userId: user.id,
-      },
-    ]);
-    const message = await this.messageRepository.create({
-      message: payload.message,
-      senderId: user.id,
-      chatId: chat.id,
+  async sendMessage(payload: CreateChatInput, user: User) {
+    let chat = await this.chatRepository.findOne({
+      where: [
+        { senderId: user.id, receiverId: payload.receiverId },
+        { senderId: payload.receiverId, receiverId: user.id },
+      ],
+      relations: ['sender', 'receiver'],
     });
+
+    if (!chat) {
+      const receiver = await this.userService.getUserById(payload.receiverId);
+      chat = await this.chatRepository
+        .create({ sender: user, receiver })
+        .save();
+    }
+
+    const message = await this.messageRepository
+      .create({ message: payload.message, senderId: user.id, chatId: chat.id })
+      .save();
+
+    chat.lastMessage = message;
+
+    await chat.save();
+
+    return chat;
   }
 
-  findAll() {
-    return this.chatRepository.find({});
+  async getChats(params: {
+    searchText: string;
+    limit: number;
+    page: number;
+    userId: string;
+  }): Promise<ChatsResponse> {
+    const [entries, total] = await this.chatRepository.findAndCount({
+      where: [{ senderId: params.userId }, { receiverId: params.userId }],
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+      relations: ['sender', 'receiver', 'lastMessage'],
+    });
+
+    return {
+      entries,
+      total,
+    };
+  }
+
+  async getConversations(params: {
+    searchText: string;
+    limit: number;
+    page: number;
+    chatId: string;
+  }): Promise<ConversationsResponse> {
+    const [entries, total] = await this.messageRepository.findAndCount({
+      where: { chatId: params.chatId },
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+      relations: ['sender'],
+    });
+
+    return {
+      entries,
+      total,
+    };
   }
 
   findOne(id: string) {
