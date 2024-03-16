@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.input';
-import { UpdateChatInput } from './dto/update-chat.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat, ChatUser, Message, User } from '@app/common';
+import { Chat, Message, User } from '@app/common';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
@@ -87,13 +86,5 @@ export class ChatService {
 
   findOne(id: string) {
     return this.chatRepository.findOne({ where: { id } });
-  }
-
-  update(id: number, updateChatInput: UpdateChatInput) {
-    return `This action updates a #${id} chat`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} chat`;
   }
 }

@@ -70,7 +70,8 @@ export class ChatResolver {
       variables: { chatId: string },
     ) => payload.messageAdded.chatId === variables.chatId,
   })
-  messageAdded(@Args('chatId', { type: () => ID }) chatId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  messageAdded(@Args('chatId', { type: () => ID }) _chatId: string) {
     return pubSub.asyncIterator('messageAdded');
   }
 }

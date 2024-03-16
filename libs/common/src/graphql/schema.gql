@@ -42,8 +42,6 @@ type ConversationsResponse {
 }
 
 input CreateChatInput {
-  """Chat ID (Optional)"""
-  chatId: ID
   message: String!
 
   """Receiver ID (Optional)"""
