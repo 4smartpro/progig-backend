@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  backend:
+    build:
+      context: .
+      target: development
+    container_name: progig-backend
+    env_file: .env
+    depends_on:
+      - postgres
+      - mysql
+    ports:
+      - '3010:3010'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  postgres:
+    image: 'postgres:13'
+    container_name: progig-postgres
+    ports:
+      - '5432:5432'
+    env_file: .env
+    volumes:
+      - ./database/postgres/data/:/var/lib/postgresql/data/:rw
+
+  mysql:
+    image: mysql:latest
+    volumes:
+      - ./database/mysql/data:/var/lib/mysql
+      - ./data/mysql/initdb.d:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password123 # any random string will do
+      MYSQL_DATABASE: progig # the name of your mysql database
+      MYSQL_USER: shahan # the name of the database user
+      MYSQL_PASSWORD: password123 # the password of the mysql user
+    ports:
+      - '3300:3306'
