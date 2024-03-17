@@ -7,5 +7,6 @@ import { Connection } from '@app/common';
 @Module({
   imports: [TypeOrmModule.forFeature([Connection])],
   providers: [ConnectionResolver, ConnectionService],
+  exports: [TypeOrmModule, ConnectionService],
 })
 export class ConnectionModule {}

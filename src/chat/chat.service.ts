@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat, Message, User } from '@app/common';
+import { Chat, Connection, Message, User } from '@app/common';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
+import { ConnectionService } from 'src/connection/connection.service';
 
 @Injectable()
 export class ChatService {
@@ -17,6 +18,7 @@ export class ChatService {
     private readonly messageRepository: Repository<Message>,
 
     private readonly userService: UserService,
+    private readonly connectionService: ConnectionService,
   ) {}
 
   async sendMessage(payload: CreateChatInput, user: User) {
@@ -33,7 +35,22 @@ export class ChatService {
       chat = await this.chatRepository
         .create({ sender: user, receiver })
         .save();
+    } else {
+      // Is Connected? if so then send message else send first message
+      if (chat.senderId === user.id) {
+        const connection = await this.connectionService.isConnected(
+          user.id,
+          payload.receiverId,
+        );
+        if (!connection) {
+          throw new NotAcceptableException(
+            'You cannot send another message before connecting with the user',
+          );
+        }
+      }
     }
+
+    console.log(chat);
 
     const message = await this.messageRepository
       .create({ message: payload.message, senderId: user.id, chatId: chat.id })

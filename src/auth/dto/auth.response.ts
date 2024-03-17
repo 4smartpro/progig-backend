@@ -18,9 +18,3 @@ export class RegistrationResponse {
   @Field()
   user: User;
 }
-
-@ObjectType()
-export class UserResponse {
-  @Field()
-  email: string;
-}

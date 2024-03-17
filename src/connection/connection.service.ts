@@ -96,4 +96,17 @@ export class ConnectionService {
 
     return 'Deleted successfully';
   }
+
+  async isConnected(followingId: string, followerId: string) {
+    return this.connectionRepository.findOne({
+      where: [
+        { followerId, followingId, status: ConnectionStatus.ACCEPTED },
+        {
+          followerId: followingId,
+          followingId: followerId,
+          status: ConnectionStatus.ACCEPTED,
+        },
+      ],
+    });
+  }
 }
