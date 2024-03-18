@@ -12,6 +12,7 @@ import { join } from 'path';
       subscriptions: {
         'graphql-ws': true,
       },
+      path: '/',
     }),
   ],
 })
