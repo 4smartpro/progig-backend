@@ -1,37 +1,17 @@
-import { UseGuards } from '@nestjs/common';
-import {
-  Args,
-  Context,
-  GqlExecutionContext,
-  GraphQLExecutionContext,
-  Mutation,
-  Resolver,
-} from '@nestjs/graphql';
-import { LocalAuthGuard } from './guards/local.guard';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { LoginResponse, RegistrationResponse } from './dto/auth.response';
 import { AuthService } from './auth.service';
 import { RegistrationInput } from './dto/register-user.input';
-import { CurrentUser, User } from '@app/common';
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
-  /**
-   * Login API done with everything
-   */
   @Mutation(() => LoginResponse)
-  @UseGuards(LocalAuthGuard)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
-    @CurrentUser() user: User,
   ) {
-    const token = await this.authService.generateJwt(user);
-
-    return {
-      user,
-      accessToken: token,
-    };
+    return this.authService.login(email, password);
   }
 
   @Mutation(() => RegistrationResponse)

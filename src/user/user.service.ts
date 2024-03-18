@@ -45,11 +45,6 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new BadRequestException('User does not exists');
-    }
-
-    return user;
+    return this.userRepository.findOne({ where: { id } });
   }
 }

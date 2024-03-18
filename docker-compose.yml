@@ -9,7 +9,7 @@ services:
     env_file: .env
     depends_on:
       - postgres
-      - mysql
+      # - mysql
     ports:
       - '3010:3010'
     volumes:
@@ -25,17 +25,17 @@ services:
     volumes:
       - ./data/postgres/:/var/lib/postgresql/data/:rw
 
-  mysql:
-    image: mysql:latest
-    container_name: progig-mysql
-    volumes:
-      - ./data/mysql/:/var/lib/mysql
-      - ./data/mysql/initdb.d:/docker-entrypoint-initdb.d
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password123 # any random string will do
-      MYSQL_DATABASE: progig # the name of your mysql database
-      MYSQL_USER: shahan # the name of the database user
-      MYSQL_PASSWORD: password123 # the password of the mysql user
-    ports:
-      - '3300:3306'
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: progig-mysql
+  #   volumes:
+  #     - ./data/mysql/:/var/lib/mysql
+  #     - ./data/mysql/initdb.d:/docker-entrypoint-initdb.d
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: password123 # any random string will do
+  #     MYSQL_DATABASE: progig # the name of your mysql database
+  #     MYSQL_USER: shahan # the name of the database user
+  #     MYSQL_PASSWORD: password123 # the password of the mysql user
+  #   ports:
+  #     - '3300:3306'
