@@ -62,7 +62,7 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (!user) {
-      throw new BadRequestException('User does not found');
+      throw new UnauthorizedException('User does not found');
     }
 
     const isMatched = user.isPasswordMatched(password);
