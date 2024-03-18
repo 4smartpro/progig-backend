@@ -18,4 +18,5 @@ async function bootstrap() {
 
   logger.verbose(`App running at port: ${port}`);
 }
+
 bootstrap();
