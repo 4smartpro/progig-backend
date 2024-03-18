@@ -7,7 +7,6 @@ import { join } from 'path';
   imports: [
     NestGraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: true,
       autoSchemaFile: join(process.cwd(), 'libs/common/src/graphql/schema.gql'),
       sortSchema: true,
       subscriptions: {
