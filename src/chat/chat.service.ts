@@ -50,10 +50,8 @@ export class ChatService {
       }
     }
 
-    console.log(chat);
-
     const message = await this.messageRepository
-      .create({ message: payload.message, senderId: user.id, chatId: chat.id })
+      .create({ message: payload.message, sender: user, chatId: chat.id })
       .save();
 
     chat.lastMessage = message;

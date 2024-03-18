@@ -11,7 +11,6 @@ import { join } from 'path';
       sortSchema: true,
       subscriptions: {
         'graphql-ws': true,
-        'subscriptions-transport-ws': true,
       },
     }),
   ],
