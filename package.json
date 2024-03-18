@@ -102,7 +102,9 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^@auth/guards(|/.*)$": "<rootDir>/src/auth/guards/$1"
+
     }
   }
 }
