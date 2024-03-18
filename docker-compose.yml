@@ -4,6 +4,7 @@ services:
     build:
       context: .
       target: development
+    command: npm run start:dev
     container_name: progig-backend
     env_file: .env
     depends_on:
@@ -22,12 +23,13 @@ services:
       - '5432:5432'
     env_file: .env
     volumes:
-      - ./database/postgres/data/:/var/lib/postgresql/data/:rw
+      - ./data/postgres/:/var/lib/postgresql/data/:rw
 
   mysql:
     image: mysql:latest
+    container_name: progig-mysql
     volumes:
-      - ./database/mysql/data:/var/lib/mysql
+      - ./data/mysql/:/var/lib/mysql
       - ./data/mysql/initdb.d:/docker-entrypoint-initdb.d
     restart: always
     environment:

@@ -33,7 +33,12 @@ export class DatabaseModule {
           useFactory: (configService: ConfigService) => {
             return {
               type: 'mysql',
-              url: configService.get('MYSQL_DATABASE_URL'),
+              host: configService.get('MYSQL_HOST'),
+              port: configService.get('MYSQL_PORT'),
+              username: configService.get('MYSQL_USER'),
+              password: configService.get('MYSQL_PASSWORD'),
+              database: configService.get('MYSQL_DB'),
+              // url: configService.get('MYSQL_DATABASE_URL'),
               logging: false,
               synchronize: true,
               migrations: getMigragions(),

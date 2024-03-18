@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat, Connection, Message, User } from '@app/common';
+import { Chat, Message, User } from '@app/common';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';

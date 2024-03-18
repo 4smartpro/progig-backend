@@ -37,3 +37,5 @@ lerna-debug.log*
 # Ignore Environment
 .env
 .env.*
+
+data/
