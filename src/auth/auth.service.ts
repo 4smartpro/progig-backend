@@ -40,6 +40,16 @@ export class AuthService {
     return token;
   }
 
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+    const token = await this.generateJwt(user);
+
+    return {
+      user,
+      accessToken: token,
+    };
+  }
+
   /**
    * this is function is used to create User in User Entity.
    * @param email this will take email of user
