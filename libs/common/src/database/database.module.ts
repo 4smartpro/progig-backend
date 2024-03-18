@@ -25,29 +25,29 @@ import getMigragions from './migration';
   ],
 })
 export class DatabaseModule {
-  // static switchMySQL(): DynamicModule {
-  //   return {
-  //     module: DatabaseModule,
-  //     imports: [
-  //       TypeOrmModule.forRootAsync({
-  //         useFactory: (configService: ConfigService) => {
-  //           return {
-  //             type: 'mysql',
-  //             host: configService.get('MYSQL_HOST'),
-  //             port: configService.get('MYSQL_PORT'),
-  //             username: configService.get('MYSQL_USER'),
-  //             password: configService.get('MYSQL_PASSWORD'),
-  //             database: configService.get('MYSQL_DB'),
-  //             // url: configService.get('MYSQL_DATABASE_URL'),
-  //             logging: false,
-  //             synchronize: true,
-  //             migrations: getMigragions(),
-  //             autoLoadEntities: true,
-  //           };
-  //         },
-  //         inject: [ConfigService],
-  //       }),
-  //     ],
-  //   };
-  // }
+  static switchMySQL(): DynamicModule {
+    return {
+      module: DatabaseModule,
+      imports: [
+        TypeOrmModule.forRootAsync({
+          useFactory: (configService: ConfigService) => {
+            return {
+              type: 'mysql',
+              // host: configService.get('MYSQL_HOST'),
+              // port: configService.get('MYSQL_PORT'),
+              // username: configService.get('MYSQL_USER'),
+              // password: configService.get('MYSQL_PASSWORD'),
+              // database: configService.get('MYSQL_DB'),
+              url: configService.get('MYSQL_DATABASE_URL'),
+              logging: false,
+              synchronize: true,
+              migrations: getMigragions(),
+              autoLoadEntities: true,
+            };
+          },
+          inject: [ConfigService],
+        }),
+      ],
+    };
+  }
 }
