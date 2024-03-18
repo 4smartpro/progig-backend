@@ -60,4 +60,4 @@ jobs:
           app-name: 'progigBackendApiServer'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1AE3882B5C1A4DF883E6B462D0C9646A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_20686C1430BC4F3D952C210613A45370 }}
