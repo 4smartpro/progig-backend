@@ -38,5 +38,5 @@ jobs:
         with:
           app-name: 'progig-backend'
           slot-name: 'Production'
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/dist
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ED6F963CB1EB4BB087E7DE35C588B487 }}
