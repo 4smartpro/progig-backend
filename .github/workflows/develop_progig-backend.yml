@@ -16,6 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Write Environment
+        run: |
+          echo `JWT_SECRET='helloworld'
+          JWT_EXPIRES_IN=365 # in day
+
+          PORT = 3010
+
+          POSTGRES_USER = "postgres"
+          POSTGRES_PASSWORD = "password"
+          POSTGRES_DB = "progig"
+          POSTGRES_HOST = "postgres"
+          POSTGRES_PORT = 5432
+          PGDATA=/var/lib/postgresql/data/` > .env
+
       - name: Build the Docker image For Production
         run: docker-compose up --build -V -d
           
