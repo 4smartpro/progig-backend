@@ -3,5 +3,9 @@ export * from './database/abstract.entity';
 export * from './database/entities';
 
 export * from './graphql/graphql.module';
-export * from './util/util.module';
-export * from './util/util.decorator';
+
+// Utility
+export * from './util/decorator';
+
+// Scalars
+export * from './scalar/upload.scalar';
