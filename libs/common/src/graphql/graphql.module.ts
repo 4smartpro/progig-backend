@@ -13,6 +13,7 @@ import { join } from 'path';
         'graphql-ws': true,
       },
       path: '/',
+      csrfPrevention: false,
     }),
   ],
 })

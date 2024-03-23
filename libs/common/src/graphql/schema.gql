@@ -42,7 +42,8 @@ type ConversationsResponse {
 }
 
 input CreateChatInput {
-  message: String!
+  attachment: Upload
+  message: String
 
   """Receiver ID (Optional)"""
   receiverId: ID
@@ -166,6 +167,9 @@ input UpdateGigInput {
   """Mandatory Field"""
   title: String
 }
+
+"""File upload scalar type"""
+scalar Upload
 
 type User {
   bio: String
