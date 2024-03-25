@@ -21,4 +21,7 @@ export class RegistrationInput {
   @IsNotEmpty()
   @IsEnum(UserRole)
   role: UserRole;
+
+  @Field()
+  bio: string;
 }
