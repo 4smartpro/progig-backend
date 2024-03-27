@@ -133,11 +133,14 @@ type Query {
 }
 
 input RegistrationInput {
-  bio: String!
+  bio: String
+  category: String
+  company: String
   email: String!
   firstname: String!
   lastname: String!
   password: String!
+  phone: String
   role: UserRole!
 }
 
