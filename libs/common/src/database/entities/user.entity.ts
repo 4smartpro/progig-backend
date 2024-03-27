@@ -37,6 +37,18 @@ export class User extends AbstractEntity {
   @Column({ nullable: true })
   bio: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  phone: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  company: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  category: string;
+
   @Field(() => UserRole)
   @Column({
     default: UserRole.HELPER,
