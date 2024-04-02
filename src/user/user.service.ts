@@ -32,11 +32,16 @@ export class UserService {
   }
 
   async findAll(params: FindUserParams): Promise<UsersResponse> {
-    const [entries, total] = await this.userRepository.findAndCount({
-      where: [{ id: Not(params.userId) }],
-      skip: params.page ? (params.page - 1) * params.limit : 0,
-      take: params.limit,
+    // const [entries, total] = await this.userRepository.findAndCount({
+    //   where: [{ id: Not(params.userId) }],
+    //   skip: params.page ? (params.page - 1) * params.limit : 0,
+    //   take: params.limit,
+    // });
+    const userQuery = this.userRepository.createQueryBuilder('e').where({
+      id: Not(params.userId),
     });
+    const [entries, total] = await userQuery.getManyAndCount();
+    // should add connection status with user
 
     return {
       entries,
