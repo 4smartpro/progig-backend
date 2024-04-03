@@ -21,4 +21,16 @@ export class RegistrationInput {
   @IsNotEmpty()
   @IsEnum(UserRole)
   role: UserRole;
+
+  @Field({ nullable: true })
+  bio: string;
+
+  @Field({ nullable: true })
+  company: string;
+
+  @Field({ nullable: true })
+  category: string;
+
+  @Field({ nullable: true })
+  phone: string;
 }

@@ -74,6 +74,7 @@ scalar DateTime
 
 type Gig {
   budget: Float
+  contractor: User!
   contractorId: String!
   createdAt: DateTime!
   deadline: DateTime
@@ -129,14 +130,19 @@ type Query {
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
 }
 
 input RegistrationInput {
+  bio: String
+  category: String
+  company: String
   email: String!
   firstname: String!
   lastname: String!
   password: String!
+  phone: String
   role: UserRole!
 }
 
@@ -173,6 +179,8 @@ scalar Upload
 
 type User {
   bio: String
+  category: String
+  company: String
   createdAt: DateTime!
   email: String!
   firstname: String
@@ -180,6 +188,7 @@ type User {
   isEmailVerified: Boolean!
   lastname: String!
   location: String
+  phone: String
   profilePicture: String
   role: UserRole!
   updatedAt: DateTime!

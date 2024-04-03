@@ -57,6 +57,7 @@ export class Gig extends AbstractEntity {
   @Column()
   contractorId: string;
 
+  @Field()
   @ManyToOne(() => User)
   @JoinColumn({ name: 'contractorId' })
   contractor: User;

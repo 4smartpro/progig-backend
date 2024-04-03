@@ -9,3 +9,7 @@ export * from './util/decorator';
 
 // Scalars
 export * from './scalar/upload.scalar';
+
+// Services
+export * from './azure/azure.file.service';
+export * from './azure/azure.module';

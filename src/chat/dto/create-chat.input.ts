@@ -10,5 +10,5 @@ export class CreateChatInput {
   message: string;
 
   @Field(() => Upload, { nullable: true })
-  attachment: Upload;
+  attachment?: Upload;
 }
