@@ -29,6 +29,7 @@ export class GigService {
       },
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
+      relations: ['contractor'],
     });
     return {
       entries,
@@ -37,7 +38,10 @@ export class GigService {
   }
 
   findOne(id: string) {
-    return this.gigRepository.findOne({ where: { id } });
+    return this.gigRepository.findOne({
+      where: { id },
+      relations: ['contractor'],
+    });
   }
 
   update(id: string, updateGigInput: UpdateGigInput) {

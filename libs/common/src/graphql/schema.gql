@@ -74,6 +74,7 @@ scalar DateTime
 
 type Gig {
   budget: Float
+  contractor: User!
   contractorId: String!
   createdAt: DateTime!
   deadline: DateTime
@@ -129,6 +130,7 @@ type Query {
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
 }
 

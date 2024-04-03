@@ -1,4 +1,4 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Int, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards';
@@ -24,5 +24,11 @@ export class UserResolver {
       userId: user.id,
       role,
     });
+  }
+
+  @Query(() => User, { name: 'user' })
+  @UseGuards(JwtAuthGuard)
+  findOne(@Args('id', { type: () => ID }) id: string) {
+    return this.userService.getUserById(id);
   }
 }
