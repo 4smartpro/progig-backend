@@ -72,6 +72,16 @@ export class GigResolver {
     return this.gigService.acceptProposal(id, user);
   }
 
+  @Mutation(() => Proposal)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
+  rejectProposal(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.rejectProposal(id, user);
+  }
+
   @Query(() => [Proposal], { name: 'proposals' })
   @UseGuards(JwtAuthGuard)
   getProposals(

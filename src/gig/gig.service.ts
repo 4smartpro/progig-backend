@@ -119,7 +119,29 @@ export class GigService {
     } else if (proposal.status === ProposalStatus.ACCEPTED) {
       throw new BadRequestException('Proposal already accepted');
     } else {
+      throw new BadRequestException();
+    }
+  }
+
+  async rejectProposal(id: string, user: User) {
+    const proposal = await this.proposalRepository.findOne({
+      where: { id },
+      relations: ['gig'],
+    });
+
+    if (proposal.gig.contractorId !== user.id) {
+      throw new UnauthorizedException('Permission denied');
+    }
+
+    if (proposal.status === ProposalStatus.PENDING) {
+      proposal.status = ProposalStatus.REJECTED;
+      await proposal.save();
+
+      return proposal;
+    } else if (proposal.status === ProposalStatus.ACCEPTED) {
       throw new BadRequestException('Proposal already accepted');
+    } else {
+      throw new BadRequestException();
     }
   }
 
