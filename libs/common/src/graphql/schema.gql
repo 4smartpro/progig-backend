@@ -115,6 +115,7 @@ type Message {
 
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
+  acceptProposal(id: ID!): Proposal!
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!

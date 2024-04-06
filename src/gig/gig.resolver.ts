@@ -4,9 +4,10 @@ import { CreateGigInput } from './dto/create-gig.input';
 import { UpdateGigInput } from './dto/update-gig.input';
 import { GigsResponse } from './dto/gigs.output';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser, Gig, Proposal, User } from '@app/common';
-import { JwtAuthGuard } from '@auth/guards';
+import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
+import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { SendProposalInput } from './dto/send-proposal.input';
+import { UseRoles } from 'src/auth/auth.decorator';
 
 @Resolver()
 export class GigResolver {
@@ -59,6 +60,16 @@ export class GigResolver {
     @CurrentUser() user: User,
   ) {
     return this.gigService.sendProposal(payload, user);
+  }
+
+  @Mutation(() => Proposal)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
+  acceptProposal(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.acceptProposal(id, user);
   }
 
   @Query(() => [Proposal], { name: 'proposals' })
