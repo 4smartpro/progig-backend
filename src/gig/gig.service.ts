@@ -10,7 +10,7 @@ import { UpdateGigInput } from './dto/update-gig.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.output';
-import { Gig, Proposal, ProposalStatus, User } from '@app/common';
+import { Contract, Gig, Proposal, ProposalStatus, User } from '@app/common';
 import { SendProposalInput } from './dto/send-proposal.input';
 
 @Injectable()
@@ -21,6 +21,9 @@ export class GigService {
 
     @InjectRepository(Proposal)
     private readonly proposalRepository: Repository<Proposal>,
+
+    @InjectRepository(Contract)
+    private readonly contractRepository: Repository<Contract>,
   ) {}
 
   async create(createGigInput: CreateGigInput, user: User) {
@@ -115,7 +118,18 @@ export class GigService {
       proposal.status = ProposalStatus.ACCEPTED;
       await proposal.save();
 
-      return proposal;
+      const contract = await this.contractRepository
+        .create({
+          gigId: proposal.gigId,
+          proposal: proposal,
+          helperId: proposal.helperId,
+          contractorId: proposal.gig.contractorId,
+          startDate: proposal.gig.startDate,
+          endDate: proposal.gig.startDate,
+        })
+        .save();
+
+      return { contract, proposal };
     } else if (proposal.status === ProposalStatus.ACCEPTED) {
       throw new BadRequestException('Proposal already accepted');
     } else {

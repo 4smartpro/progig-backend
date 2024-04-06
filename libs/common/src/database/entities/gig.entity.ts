@@ -27,7 +27,11 @@ export class Gig extends AbstractEntity {
 
   @Field(() => Date, { nullable: true })
   @Column({ nullable: true, type: 'date' })
-  deadline: Date;
+  startDate: Date;
+
+  @Field({ nullable: true })
+  @Column({ default: 50 })
+  maxProposal: number;
 
   @Field()
   @Column({ default: GigStatus.OPEN, type: 'enum', enum: GigStatus })
