@@ -4,10 +4,12 @@ import { CreateGigInput } from './dto/create-gig.input';
 import { UpdateGigInput } from './dto/update-gig.input';
 import { GigsResponse } from './dto/gigs.output';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser, Gig, User } from '@app/common';
-import { JwtAuthGuard } from '@auth/guards';
+import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
+import { JwtAuthGuard, RolesGuard } from '@auth/guards';
+import { SendProposalInput } from './dto/send-proposal.input';
+import { UseRoles } from 'src/auth/auth.decorator';
 
-@Resolver(() => Gig)
+@Resolver()
 export class GigResolver {
   constructor(private readonly gigService: GigService) {}
 
@@ -31,17 +33,61 @@ export class GigResolver {
   }
 
   @Query(() => Gig, { name: 'gig', nullable: true })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.gigService.findOne(id);
+  @UseGuards(JwtAuthGuard)
+  findOne(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.findOne(id, user);
   }
 
   @Mutation(() => Gig)
+  @UseGuards(JwtAuthGuard)
   updateGig(@Args('updateGigInput') updateGigInput: UpdateGigInput) {
     return this.gigService.update(updateGigInput.id, updateGigInput);
   }
 
   @Mutation(() => Gig)
+  @UseGuards(JwtAuthGuard)
   removeGig(@Args('id') id: string) {
     return this.gigService.remove(id);
+  }
+
+  @Mutation(() => Proposal)
+  @UseGuards(JwtAuthGuard)
+  sendProposal(
+    @Args('payload') payload: SendProposalInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.sendProposal(payload, user);
+  }
+
+  @Mutation(() => Proposal)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
+  acceptProposal(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.acceptProposal(id, user);
+  }
+
+  @Mutation(() => Proposal)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
+  rejectProposal(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.rejectProposal(id, user);
+  }
+
+  @Query(() => [Proposal], { name: 'proposals' })
+  @UseGuards(JwtAuthGuard)
+  getProposals(
+    @Args('gigId', { type: () => ID }) gigId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.gigService.getProposals(gigId, user);
   }
 }

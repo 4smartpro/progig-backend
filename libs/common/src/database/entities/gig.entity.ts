@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '@app/common';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { AbstractEntity, Proposal } from '@app/common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -61,4 +61,8 @@ export class Gig extends AbstractEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'contractorId' })
   contractor: User;
+
+  @Field(() => [Proposal], { defaultValue: [] })
+  @OneToMany(() => Proposal, (p) => p.gig)
+  proposals: Proposal[];
 }

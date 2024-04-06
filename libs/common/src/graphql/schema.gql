@@ -84,6 +84,7 @@ type Gig {
   jobType: String
   location: String
   paymentMethod: String
+  proposals: [Proposal!]!
   requirements: String
   status: String!
   title: String!
@@ -114,14 +115,29 @@ type Message {
 
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
+  acceptProposal(id: ID!): Proposal!
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
   register(payload: RegistrationInput!): RegistrationResponse!
+  rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
+  sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(updateGigInput: UpdateGigInput!): Gig!
+}
+
+type Proposal {
+  coverLetter: String!
+  createdAt: DateTime!
+  gig: Gig
+  gigId: String!
+  helper: User
+  helperId: String!
+  id: ID!
+  status: String!
+  updatedAt: DateTime!
 }
 
 type Query {
@@ -130,6 +146,7 @@ type Query {
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
   gigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  proposals(gigId: ID!): [Proposal!]!
   user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
 }
@@ -149,6 +166,14 @@ input RegistrationInput {
 type RegistrationResponse {
   message: String!
   user: User!
+}
+
+input SendProposalInput {
+  """Mandatory Field"""
+  coverLetter: String!
+
+  """Mandatory Field"""
+  gigId: String!
 }
 
 type Subscription {
