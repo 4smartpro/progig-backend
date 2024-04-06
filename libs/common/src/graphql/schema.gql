@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AcceptProposalResponse {
+  contract: Contract!
+  proposal: Proposal!
+}
+
 type Chat {
   conversations: [Message!]!
   createdAt: DateTime!
@@ -34,6 +39,29 @@ type Connection {
 type ConnectionsResponse {
   entries: [Connection!]!
   total: Int!
+}
+
+type Contract {
+  contractor: User
+  contractorId: String!
+  createdAt: DateTime!
+  endDate: DateTime
+  gig: Gig
+  gigId: String!
+  helper: User
+  helperId: String!
+  id: ID!
+  proposal: Proposal
+  proposalId: String!
+  startDate: DateTime
+  status: ContractStatus!
+  updatedAt: DateTime!
+}
+
+enum ContractStatus {
+  ACTIVE
+  CANCELED
+  COMPLETED
 }
 
 type ConversationsResponse {
@@ -77,15 +105,16 @@ type Gig {
   contractor: User!
   contractorId: String!
   createdAt: DateTime!
-  deadline: DateTime
   description: String!
   id: ID!
   image: String
   jobType: String
   location: String
+  maxProposal: Float
   paymentMethod: String
   proposals: [Proposal!]!
   requirements: String
+  startDate: DateTime
   status: String!
   title: String!
   updatedAt: DateTime!
@@ -115,7 +144,7 @@ type Message {
 
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
-  acceptProposal(id: ID!): Proposal!
+  acceptProposal(id: ID!): AcceptProposalResponse!
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!

@@ -8,6 +8,7 @@ import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
 import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { SendProposalInput } from './dto/send-proposal.input';
 import { UseRoles } from 'src/auth/auth.decorator';
+import { AcceptProposalResponse } from './dto/accept-proposal.output';
 
 @Resolver()
 export class GigResolver {
@@ -53,6 +54,9 @@ export class GigResolver {
     return this.gigService.remove(id);
   }
 
+  /**
+   * All Proposal Related API
+   */
   @Mutation(() => Proposal)
   @UseGuards(JwtAuthGuard)
   sendProposal(
@@ -62,7 +66,7 @@ export class GigResolver {
     return this.gigService.sendProposal(payload, user);
   }
 
-  @Mutation(() => Proposal)
+  @Mutation(() => AcceptProposalResponse)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseRoles(UserRole.CONTRACTOR)
   acceptProposal(
@@ -90,4 +94,8 @@ export class GigResolver {
   ) {
     return this.gigService.getProposals(gigId, user);
   }
+
+  /**
+   * All Contract Related API
+   */
 }
