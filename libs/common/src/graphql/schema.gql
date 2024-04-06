@@ -120,6 +120,7 @@ type Mutation {
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
   register(payload: RegistrationInput!): RegistrationResponse!
+  rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
