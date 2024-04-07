@@ -5,13 +5,13 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateGigInput } from './dto/create-gig.input';
-import { UpdateGigInput } from './dto/update-gig.input';
+import { CreateGigInput } from './dto/create-gig.dto';
+import { UpdateGigInput } from './dto/update-gig.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { GigsResponse } from './dto/gigs.output';
+import { GigsResponse } from './dto/gigs.dto';
 import { Contract, Gig, Proposal, ProposalStatus, User } from '@app/common';
-import { SendProposalInput } from './dto/send-proposal.input';
+import { SendProposalInput } from './dto/send-proposal.dto';
 
 @Injectable()
 export class GigService {

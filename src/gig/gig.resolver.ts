@@ -1,14 +1,14 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { GigService } from './gig.service';
-import { CreateGigInput } from './dto/create-gig.input';
-import { UpdateGigInput } from './dto/update-gig.input';
-import { GigsResponse } from './dto/gigs.output';
+import { CreateGigInput } from './dto/create-gig.dto';
+import { UpdateGigInput } from './dto/update-gig.dto';
+import { GigsResponse } from './dto/gigs.dto';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
 import { JwtAuthGuard, RolesGuard } from '@auth/guards';
-import { SendProposalInput } from './dto/send-proposal.input';
+import { SendProposalInput } from './dto/send-proposal.dto';
 import { UseRoles } from 'src/auth/auth.decorator';
-import { AcceptProposalResponse } from './dto/accept-proposal.output';
+import { AcceptProposalResponse } from './dto/accept-proposal.dto';
 
 @Resolver()
 export class GigResolver {

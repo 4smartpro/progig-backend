@@ -1,11 +1,12 @@
-import { Args, ID, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards';
 import { CurrentUser, User, UserRole } from '@app/common';
 import { UsersResponse } from './dto/user.dto';
+import { UpdateUserInput } from './dto/update-user.dto';
 
-@Resolver('User')
+@Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
   @Query(() => UsersResponse, { name: 'users' })
@@ -30,5 +31,14 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard)
   findOne(@Args('id', { type: () => ID }) id: string) {
     return this.userService.getUserById(id);
+  }
+
+  @Mutation(() => User)
+  @UseGuards(JwtAuthGuard)
+  updateUser(
+    @Args('payload') payload: UpdateUserInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.userService.updateUser(user.id, payload);
   }
 }

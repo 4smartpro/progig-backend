@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { User } from '@app/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
-import { RegistrationInput } from 'src/auth/dto/register-user.input';
-import { User } from '@app/common';
 import { UsersResponse } from './dto/user.dto';
 import { FindUserParams } from './dto/find-user.dto';
+import { UpdateUserInput } from './dto/update-user.dto';
+import { CreateUserInput } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -23,8 +24,22 @@ export class UserService {
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  createUser(createUserDto: RegistrationInput): Promise<User> {
+  createUser(createUserDto: CreateUserInput): Promise<User> {
     return this.userRepository.create(createUserDto).save();
+  }
+
+  async updateUser(
+    id: string,
+    updateUserInput: UpdateUserInput,
+  ): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) throw new NotFoundException('User does not exists');
+
+    Object.assign(user, updateUserInput);
+    await user.save();
+
+    return user;
   }
 
   async findOne(email: string): Promise<User> {

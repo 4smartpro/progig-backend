@@ -8,8 +8,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { RegistrationInput } from './dto/register-user.input';
 import { User } from '@app/common';
+import { CreateUserInput } from 'src/user/dto/create-user.dto';
 
 export interface TokenPayload {
   userId: string;
@@ -78,7 +78,7 @@ export class AuthService {
     response.clearCookie('Authorization', { httpOnly: true });
   }
 
-  async register(payload: RegistrationInput): Promise<User> {
+  async register(payload: CreateUserInput): Promise<User> {
     try {
       const user = await this.userService.createUser(payload);
       return user;
