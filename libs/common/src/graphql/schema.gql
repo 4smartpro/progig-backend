@@ -233,12 +233,10 @@ input UpdateUserInput {
   bio: String
   category: String
   company: String
-  email: String
-  firstname: String
-  lastname: String
-  password: String
+  email: String!
+  firstname: String!
+  lastname: String!
   phone: String
-  role: UserRole
 }
 
 """File upload scalar type"""
