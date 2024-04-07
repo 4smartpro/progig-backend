@@ -95,6 +95,18 @@ input CreateGigInput {
   title: String!
 }
 
+input CreateUserInput {
+  bio: String
+  category: String
+  company: String
+  email: String!
+  firstname: String!
+  lastname: String!
+  password: String!
+  phone: String
+  role: UserRole!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -148,13 +160,14 @@ type Mutation {
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
-  register(payload: RegistrationInput!): RegistrationResponse!
+  register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
   sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(updateGigInput: UpdateGigInput!): Gig!
+  updateUser(payload: UpdateUserInput!): User!
 }
 
 type Proposal {
@@ -178,18 +191,6 @@ type Query {
   proposals(gigId: ID!): [Proposal!]!
   user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
-}
-
-input RegistrationInput {
-  bio: String
-  category: String
-  company: String
-  email: String!
-  firstname: String!
-  lastname: String!
-  password: String!
-  phone: String
-  role: UserRole!
 }
 
 type RegistrationResponse {
@@ -226,6 +227,18 @@ input UpdateGigInput {
 
   """Mandatory Field"""
   title: String
+}
+
+input UpdateUserInput {
+  bio: String
+  category: String
+  company: String
+  email: String
+  firstname: String
+  lastname: String
+  password: String
+  phone: String
+  role: UserRole
 }
 
 """File upload scalar type"""

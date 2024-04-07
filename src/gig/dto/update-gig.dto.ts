@@ -1,4 +1,4 @@
-import { CreateGigInput } from './create-gig.input';
+import { CreateGigInput } from './create-gig.dto';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
