@@ -17,7 +17,7 @@ import {
 } from '@app/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards';
-import { CreateChatInput } from './dto/create-chat.input';
+import { CreateChatInput } from './dto/create-chat.dto';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
 import { PubSub } from 'graphql-subscriptions';
