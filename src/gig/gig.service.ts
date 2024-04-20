@@ -12,6 +12,8 @@ import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.dto';
 import { Contract, Gig, Proposal, ProposalStatus, User } from '@app/common';
 import { SendProposalInput } from './dto/send-proposal.dto';
+import { PaginationDto } from '@app/common/util/default.dto';
+import { GetMyProposalDto } from './dto/get-proposals.dto';
 
 @Injectable()
 export class GigService {
@@ -36,10 +38,17 @@ export class GigService {
     searchText: string;
     limit: number;
     page: number;
+    contractorId?: string;
   }): Promise<GigsResponse> {
+    const where = {};
+
+    if (params.contractorId) {
+      where['contractorId'] = params.contractorId;
+    }
     const [entries, total] = await this.gigRepository.findAndCount({
       where: {
         description: ILike(`%${params.searchText}%`),
+        ...where,
       },
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
@@ -169,5 +178,27 @@ export class GigService {
     return this.proposalRepository.find({
       where,
     });
+  }
+
+  async getMyProposals({
+    helperId,
+    page,
+    limit,
+    searchText,
+  }: GetMyProposalDto) {
+    const [entries, total] = await this.proposalRepository.findAndCount({
+      where: {
+        helperId,
+        coverLetter: ILike(`%${searchText}%`),
+      },
+      skip: page ? (page - 1) * limit : 0,
+      take: limit,
+      relations: ['gig'],
+    });
+
+    return {
+      entries,
+      total,
+    };
   }
 }

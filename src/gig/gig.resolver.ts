@@ -9,6 +9,7 @@ import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { SendProposalInput } from './dto/send-proposal.dto';
 import { UseRoles } from 'src/auth/auth.decorator';
 import { AcceptProposalResponse } from './dto/accept-proposal.dto';
+import { ProposalsResponse } from './dto/get-proposals.dto';
 
 @Resolver()
 export class GigResolver {
@@ -29,8 +30,30 @@ export class GigResolver {
     @Args('page', { nullable: true, type: () => Int }) page?: number,
     @Args('limit', { nullable: true, type: () => Int }) limit?: number,
     @Args('searchText', { nullable: true }) searchText?: string,
+    @Args('contractorId', { nullable: true }) contractorId?: string,
   ) {
-    return this.gigService.findAll({ page, limit, searchText });
+    return this.gigService.findAll({
+      page,
+      limit,
+      searchText,
+      contractorId,
+    });
+  }
+
+  @Query(() => GigsResponse, { name: 'myGigs' })
+  @UseGuards(JwtAuthGuard)
+  findAllMyGigs(
+    @CurrentUser() user: User,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+    @Args('limit', { nullable: true, type: () => Int }) limit?: number,
+    @Args('searchText', { nullable: true }) searchText?: string,
+  ) {
+    return this.gigService.findAll({
+      page,
+      limit,
+      searchText,
+      contractorId: user.id,
+    });
   }
 
   @Query(() => Gig, { name: 'gig', nullable: true })
@@ -93,6 +116,22 @@ export class GigResolver {
     @CurrentUser() user: User,
   ) {
     return this.gigService.getProposals(gigId, user);
+  }
+
+  @Query(() => ProposalsResponse, { name: 'myProposals' })
+  @UseGuards(JwtAuthGuard)
+  getMyProposals(
+    @CurrentUser() user: User,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+    @Args('limit', { nullable: true, type: () => Int }) limit?: number,
+    @Args('searchText', { nullable: true }) searchText?: string,
+  ) {
+    return this.gigService.getMyProposals({
+      helperId: user.id,
+      page,
+      limit,
+      searchText,
+    });
   }
 
   // Get My All Sent Proposals List

@@ -193,12 +193,19 @@ type Proposal {
   updatedAt: DateTime!
 }
 
+type ProposalsResponse {
+  entries: [Proposal!]!
+  total: Int!
+}
+
 type Query {
   chats(limit: Int, page: Int, searchText: String): ChatsResponse!
   connections(connectionType: ConnectionType, limit: Int, page: Int, searchText: String, status: ConnectionStatus): ConnectionsResponse!
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
-  gigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  gigs(contractorId: String, limit: Int, page: Int, searchText: String): GigsResponse!
+  myGigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  myProposals(limit: Int, page: Int, searchText: String): ProposalsResponse!
   proposals(gigId: ID!): [Proposal!]!
   user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
