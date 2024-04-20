@@ -68,11 +68,25 @@ export class UserService {
     //   skip: params.page ? (params.page - 1) * params.limit : 0,
     //   take: params.limit,
     // });
-    const userQuery = this.userRepository.createQueryBuilder('e').where({
-      id: Not(params.userId),
-    });
+    const userQuery = this.userRepository
+      .createQueryBuilder('e')
+      .where({
+        id: Not(params.userId),
+      })
+      .loadRelationIdAndMap('e.connections', 'e.connections', 'c', (query) =>
+        query.andWhere(
+          `c.followingId = :followingId OR c.followerId = :followerId`,
+          {
+            followingId: params.userId,
+            followerId: params.userId,
+          },
+        ),
+      );
+
     const [entries, total] = await userQuery.getManyAndCount();
     // should add connection status with user
+
+    console.log(entries);
 
     return {
       entries,

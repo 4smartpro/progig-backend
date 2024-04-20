@@ -1,8 +1,8 @@
-import { Entity, Column, BeforeInsert, OneToOne } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AbstractEntity } from '../abstract.entity';
-import { Contractor } from './contractor.entity';
+import { Connection } from './connection.entity';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -65,6 +65,9 @@ export class User extends AbstractEntity {
   @Field()
   @Column({ default: false })
   isEmailVerified: boolean;
+
+  @OneToMany(() => Connection, (s) => s.follower)
+  connections: Connection[];
 
   @BeforeInsert()
   async hashPassword() {

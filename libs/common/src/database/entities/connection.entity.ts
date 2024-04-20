@@ -1,5 +1,5 @@
 import { AbstractEntity } from '@app/common';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
@@ -9,24 +9,26 @@ export enum ConnectionStatus {
   REJECTED = 'REJECTED',
 }
 
+registerEnumType(ConnectionStatus, { name: 'ConnectionStatus' });
+
 @ObjectType()
 @Entity()
 export class Connection extends AbstractEntity {
-  @Field()
+  @Field({ nullable: true })
   @Column()
   followerId: string;
 
-  @Field({ nullable: true })
-  @ManyToOne(() => User)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'followerId' })
   follower: User;
 
-  @Field()
+  @Field({ nullable: true })
   @Column()
   followingId: string;
 
-  @Field({ nullable: true })
-  @ManyToOne(() => User)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'followingId' })
   following: User;
 
