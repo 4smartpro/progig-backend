@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ConnectionService } from './connection.service';
-import { Connection, CurrentUser, User } from '@app/common';
+import { Connection, ConnectionStatus, CurrentUser, User } from '@app/common';
 import { UseGuards } from '@nestjs/common';
-import { ConnectionsResponse } from './dto/connection.dto';
+import { ConnectionType, ConnectionsResponse } from './dto/connection.dto';
 import { JwtAuthGuard } from '@auth/guards';
 
 @Resolver(() => Connection)
@@ -16,12 +16,18 @@ export class ConnectionResolver {
     @Args('page', { nullable: true, type: () => Int }) page?: number,
     @Args('limit', { nullable: true, type: () => Int }) limit?: number,
     @Args('searchText', { nullable: true }) searchText?: string,
+    @Args('status', { nullable: true, type: () => ConnectionStatus })
+    status?: ConnectionStatus,
+    @Args('connectionType', { nullable: true, type: () => ConnectionType })
+    connectionType?: ConnectionType,
   ) {
     return this.connectionService.findAll({
       page,
       limit,
       searchText,
       userId: user.id,
+      status,
+      connectionType,
     });
   }
 
@@ -31,7 +37,10 @@ export class ConnectionResolver {
     @Args('followingId', { type: () => ID }) followingId: string,
     @CurrentUser() user: User,
   ) {
-    return this.connectionService.sendRequest(followingId, user.id);
+    return this.connectionService.sendRequest({
+      followingId,
+      followerId: user.id,
+    });
   }
 
   @Mutation(() => Connection)

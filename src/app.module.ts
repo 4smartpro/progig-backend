@@ -21,6 +21,7 @@ import { ChatModule } from './chat/chat.module';
       }),
       envFilePath: '.env',
     }),
+    // DatabaseModule,
     DatabaseModule.switchMySQL(),
     GraphQLModule,
     AuthModule,

@@ -6,7 +6,7 @@ import {
 import { Connection, ConnectionStatus } from '@app/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConnectionsResponse } from './dto/connection.dto';
+import { ConnectionType, ConnectionsResponse } from './dto/connection.dto';
 
 @Injectable()
 export class ConnectionService {
@@ -20,9 +20,26 @@ export class ConnectionService {
     limit: number;
     page: number;
     userId: string;
+    status: ConnectionStatus;
+    connectionType: ConnectionType;
   }): Promise<ConnectionsResponse> {
+    let where: any = {
+      status: params.status,
+    };
+
+    if (params.connectionType === ConnectionType.FOLLOWER) {
+      where['followingId'] = params.userId;
+    } else if (params.connectionType === ConnectionType.FOLLOWING) {
+      where['followerId'] = params.userId;
+    } else {
+      where = [
+        { followingId: params.userId, status: params.status },
+        { followerId: params.userId, status: params.status },
+      ];
+    }
+
     const [entries, total] = await this.connectionRepository.findAndCount({
-      where: [{ followingId: params.userId }, { followerId: params.userId }],
+      where,
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
       relations: ['following', 'follower'],
@@ -40,7 +57,13 @@ export class ConnectionService {
    * @param followerId is the requester
    * @returns {Connection}
    */
-  async sendRequest(followingId: string, followerId: string) {
+  async sendRequest({
+    followingId,
+    followerId,
+  }: {
+    followingId: string;
+    followerId: string;
+  }) {
     const request = await this.connectionRepository.findOne({
       where: {
         followingId,

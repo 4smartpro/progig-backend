@@ -95,6 +95,8 @@ export class GigResolver {
     return this.gigService.getProposals(gigId, user);
   }
 
+  // Get My All Sent Proposals List
+
   /**
    * All Contract Related API
    */
