@@ -33,6 +33,9 @@ export class Gig extends AbstractEntity {
   @Column({ default: 50 })
   maxProposal: number;
 
+  @Field({ nullable: true, defaultValue: 0 })
+  noOfProposals: number;
+
   @Field()
   @Column({ default: GigStatus.OPEN, type: 'enum', enum: GigStatus })
   status: GigStatus;

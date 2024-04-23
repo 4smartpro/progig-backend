@@ -4,7 +4,14 @@ import { CreateGigInput } from './dto/create-gig.dto';
 import { UpdateGigInput } from './dto/update-gig.dto';
 import { GigsResponse } from './dto/gigs.dto';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
+import {
+  CurrentUser,
+  Gig,
+  Proposal,
+  SavedGig,
+  User,
+  UserRole,
+} from '@app/common';
 import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { SendProposalInput } from './dto/send-proposal.dto';
 import { UseRoles } from 'src/auth/auth.decorator';
@@ -53,6 +60,34 @@ export class GigResolver {
       limit,
       searchText,
       contractorId: user.id,
+    });
+  }
+
+  @Mutation(() => ID, { nullable: true })
+  @UseGuards(JwtAuthGuard)
+  saveUnsaveGig(
+    @CurrentUser() user: User,
+    @Args('gigId', { nullable: true, type: () => ID }) gigId?: string,
+  ) {
+    return this.gigService.saveUnsaveGig({
+      userId: user.id,
+      gigId,
+    });
+  }
+
+  @Query(() => GigsResponse)
+  @UseGuards(JwtAuthGuard)
+  savedGigs(
+    @CurrentUser() user: User,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+    @Args('limit', { nullable: true, type: () => Int }) limit?: number,
+    @Args('searchText', { nullable: true }) searchText?: string,
+  ) {
+    return this.gigService.savedGigs({
+      page,
+      limit,
+      searchText,
+      userId: user.id,
     });
   }
 

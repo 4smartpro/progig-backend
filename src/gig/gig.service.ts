@@ -10,10 +10,18 @@ import { UpdateGigInput } from './dto/update-gig.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.dto';
-import { Contract, Gig, Proposal, ProposalStatus, User } from '@app/common';
+import {
+  Contract,
+  Gig,
+  Proposal,
+  ProposalStatus,
+  SavedGig,
+  User,
+} from '@app/common';
 import { SendProposalInput } from './dto/send-proposal.dto';
 import { PaginationDto } from '@app/common/util/default.dto';
 import { GetMyProposalDto } from './dto/get-proposals.dto';
+import { SaveGigInput } from './dto/save-gig.dto';
 
 @Injectable()
 export class GigService {
@@ -26,6 +34,9 @@ export class GigService {
 
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<Contract>,
+
+    @InjectRepository(SavedGig)
+    private readonly savedGigRepository: Repository<SavedGig>,
   ) {}
 
   async create(createGigInput: CreateGigInput, user: User) {
@@ -52,10 +63,14 @@ export class GigService {
       },
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
-      relations: ['contractor'],
+      relations: ['contractor', 'proposals'],
     });
+
     return {
-      entries,
+      entries: entries.map((e) => {
+        e.noOfProposals = e.proposals.length;
+        return e;
+      }),
       total,
     };
   }
@@ -82,6 +97,18 @@ export class GigService {
   }
 
   async sendProposal(payload: SendProposalInput, user: User) {
+    const gig = await this.gigRepository.findOne({
+      where: {
+        id: payload.gigId,
+      },
+      relations: ['proposals'],
+    });
+
+    if (gig.proposals.length >= gig.maxProposal) {
+      throw new UnprocessableEntityException(
+        'Proposal limit exceed. You cannot send any proposal',
+      );
+    }
     const isExists = await this.proposalRepository.findOne({
       where: {
         gigId: payload.gigId,
@@ -198,6 +225,45 @@ export class GigService {
 
     return {
       entries,
+      total,
+    };
+  }
+
+  async saveUnsaveGig({ gigId, userId }: SaveGigInput) {
+    const isExists = await this.savedGigRepository.findOne({
+      where: { userId, gigId },
+    });
+
+    if (isExists) {
+      await isExists.remove();
+      return null;
+    }
+
+    const saved = await this.savedGigRepository
+      .create({ userId, gigId })
+      .save();
+    return saved.id;
+  }
+
+  async savedGigs(params: {
+    searchText: string;
+    limit: number;
+    page: number;
+    userId: string;
+  }): Promise<GigsResponse> {
+    const [entries, total] = await this.savedGigRepository.findAndCount({
+      where: {
+        userId: params.userId,
+      },
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+      relations: ['gig'],
+    });
+
+    return {
+      entries: entries.map((e) => {
+        return e.gig;
+      }),
       total,
     };
   }

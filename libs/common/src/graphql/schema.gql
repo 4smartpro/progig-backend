@@ -134,6 +134,7 @@ type Gig {
   jobType: String
   location: String
   maxProposal: Float
+  noOfProposals: Float
   paymentMethod: String
   proposals: [Proposal!]!
   requirements: String
@@ -174,6 +175,7 @@ type Mutation {
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
+  saveUnsaveGig(gigId: ID): ID
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
   sendProposal(payload: SendProposalInput!): Proposal!
@@ -207,6 +209,7 @@ type Query {
   myGigs(limit: Int, page: Int, searchText: String): GigsResponse!
   myProposals(limit: Int, page: Int, searchText: String): ProposalsResponse!
   proposals(gigId: ID!): [Proposal!]!
+  savedGigs(limit: Int, page: Int, searchText: String): GigsResponse!
   user(id: ID!): User!
   users(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
 }
