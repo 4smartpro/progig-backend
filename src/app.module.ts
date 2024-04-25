@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ConnectionModule } from './connection/connection.module';
 import * as Joi from 'joi';
 import { ChatModule } from './chat/chat.module';
+import { ContractModule } from './contract/contract.module';
 
 @Module({
   imports: [
@@ -21,14 +22,14 @@ import { ChatModule } from './chat/chat.module';
       }),
       envFilePath: '.env',
     }),
-    // DatabaseModule,
-    DatabaseModule.switchMySQL(),
+    DatabaseModule,
     GraphQLModule,
     AuthModule,
     UserModule,
     GigModule,
     ConnectionModule,
     ChatModule,
+    ContractModule,
   ],
 })
 export class AppModule {}

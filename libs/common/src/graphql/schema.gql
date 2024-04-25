@@ -81,11 +81,16 @@ type ConversationsResponse {
 }
 
 input CreateChatInput {
-  attachment: Upload
+  file: Upload
   message: String
 
   """Receiver ID (Optional)"""
   receiverId: ID
+}
+
+input CreateContractInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 input CreateGigInput {
@@ -129,6 +134,7 @@ type Gig {
   contractorId: String!
   createdAt: DateTime!
   description: String!
+  endDate: DateTime
   id: ID!
   image: String
   jobType: String
@@ -155,6 +161,7 @@ type LoginResponse {
 }
 
 type Message {
+  attachment: String
   chat: Chat
   chatId: String!
   createdAt: DateTime!
@@ -169,21 +176,26 @@ type Message {
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
+  createContract(createContractInput: CreateContractInput!): Contract!
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
+  removeContract(id: Int!): Contract!
   removeGig(id: String!): Gig!
   saveUnsaveGig(gigId: ID): ID
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
   sendProposal(payload: SendProposalInput!): Proposal!
+  updateContract(updateContractInput: UpdateContractInput!): Contract!
   updateGig(updateGigInput: UpdateGigInput!): Gig!
   updateUser(payload: UpdateUserInput!): User!
 }
 
 type Proposal {
+  contract: Contract
+  contractId: String
   coverLetter: String!
   createdAt: DateTime!
   gig: Gig
@@ -203,6 +215,7 @@ type ProposalsResponse {
 type Query {
   chats(limit: Int, page: Int, searchText: String): ChatsResponse!
   connections(connectionType: ConnectionType, limit: Int, page: Int, searchText: String, status: ConnectionStatus): ConnectionsResponse!
+  contract(id: Int!): Contract!
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
   gigs(contractorId: String, limit: Int, page: Int, searchText: String): GigsResponse!
@@ -229,6 +242,12 @@ input SendProposalInput {
 
 type Subscription {
   messageAdded(chatId: ID!): Message!
+}
+
+input UpdateContractInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateGigInput {

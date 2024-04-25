@@ -3,6 +3,7 @@ import { Gig } from './gig.entity';
 import { User } from './user.entity';
 import { AbstractEntity } from '../abstract.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Contract } from './contract.entity';
 
 export enum ProposalStatus {
   PENDING = 'PENDING',
@@ -43,4 +44,13 @@ export class Proposal extends AbstractEntity {
     type: 'enum',
   })
   status: ProposalStatus;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  contractId: string;
+
+  @Field(() => Contract, { nullable: true })
+  @ManyToOne(() => Contract)
+  @JoinColumn({ name: 'contractId' })
+  contract: Contract;
 }

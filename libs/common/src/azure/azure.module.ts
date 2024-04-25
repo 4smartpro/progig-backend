@@ -5,5 +5,6 @@ import { AzureFilesService } from './azure.file.service';
 @Module({
   imports: [ConfigModule],
   exports: [AzureFilesService],
+  providers: [],
 })
 export class AzureModule {}

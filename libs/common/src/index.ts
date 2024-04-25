@@ -1,5 +1,6 @@
 export * from './database/database.module';
 export * from './database/abstract.entity';
+// export * from './database/abstract.repository';
 export * from './database/entities';
 
 export * from './graphql/graphql.module';

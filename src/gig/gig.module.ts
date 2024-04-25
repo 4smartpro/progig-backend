@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contract, Gig, Proposal, SavedGig } from '@app/common';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Gig, Proposal, Contract, SavedGig])],
+  imports: [TypeOrmModule.forFeature([Gig, Proposal, SavedGig, Contract])],
   providers: [GigResolver, GigService],
 })
 export class GigModule {}

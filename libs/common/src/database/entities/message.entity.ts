@@ -8,8 +8,12 @@ import { User } from './user.entity';
 @Entity()
 export class Message extends AbstractEntity {
   @Field({ nullable: true })
-  @Column()
-  message: string;
+  @Column({ nullable: true })
+  message?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  attachment?: string;
 
   @Field(() => Boolean)
   @Column({ default: false })
