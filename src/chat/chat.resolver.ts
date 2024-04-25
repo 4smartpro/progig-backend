@@ -36,13 +36,11 @@ export class ChatResolver {
     @Args('payload') payload: CreateChatInput,
     @CurrentUser() user: User,
   ) {
-    if (payload.attachment) {
-      const fileurl = await this.azureFileService.uploadFile(
-        payload.attachment,
-        'test',
-      );
-      console.log(fileurl);
+    if (payload.file) {
+      const fileurl = await this.azureFileService.uploadFile(payload.file);
+      payload.attachment = fileurl;
     }
+
     const chat = await this.chatService.sendMessage(payload, user);
     pubSub.publish('messageAdded', { messageAdded: chat.lastMessage });
     return chat;

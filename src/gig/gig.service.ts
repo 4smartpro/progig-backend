@@ -19,7 +19,6 @@ import {
   User,
 } from '@app/common';
 import { SendProposalInput } from './dto/send-proposal.dto';
-import { PaginationDto } from '@app/common/util/default.dto';
 import { GetMyProposalDto } from './dto/get-proposals.dto';
 import { SaveGigInput } from './dto/save-gig.dto';
 
@@ -32,11 +31,11 @@ export class GigService {
     @InjectRepository(Proposal)
     private readonly proposalRepository: Repository<Proposal>,
 
-    @InjectRepository(Contract)
-    private readonly contractRepository: Repository<Contract>,
-
     @InjectRepository(SavedGig)
     private readonly savedGigRepository: Repository<SavedGig>,
+
+    @InjectRepository(Contract)
+    private readonly contractRepository: Repository<Contract>,
   ) {}
 
   async create(createGigInput: CreateGigInput, user: User) {
@@ -151,9 +150,6 @@ export class GigService {
     }
 
     if (proposal.status === ProposalStatus.PENDING) {
-      proposal.status = ProposalStatus.ACCEPTED;
-      await proposal.save();
-
       const contract = await this.contractRepository
         .create({
           gigId: proposal.gigId,
@@ -161,9 +157,13 @@ export class GigService {
           helperId: proposal.helperId,
           contractorId: proposal.gig.contractorId,
           startDate: proposal.gig.startDate,
-          endDate: proposal.gig.startDate,
+          endDate: proposal.gig.endDate,
         })
         .save();
+
+      proposal.status = ProposalStatus.ACCEPTED;
+      proposal.contract = contract;
+      await proposal.save();
 
       return { contract, proposal };
     } else if (proposal.status === ProposalStatus.ACCEPTED) {
@@ -220,7 +220,7 @@ export class GigService {
       },
       skip: page ? (page - 1) * limit : 0,
       take: limit,
-      relations: ['gig'],
+      relations: ['gig', 'contract'],
     });
 
     return {

@@ -7,8 +7,10 @@ export class CreateChatInput {
   receiverId: string;
 
   @Field({ nullable: true })
-  message: string;
+  message?: string;
+
+  attachment?: string;
 
   @Field(() => Upload, { nullable: true })
-  attachment?: Upload;
+  file?: Upload;
 }

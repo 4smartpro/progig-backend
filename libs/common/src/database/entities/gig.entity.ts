@@ -29,6 +29,10 @@ export class Gig extends AbstractEntity {
   @Column({ nullable: true, type: 'date' })
   startDate: Date;
 
+  @Field(() => Date, { nullable: true })
+  @Column({ nullable: true, type: 'date' })
+  endDate: Date;
+
   @Field({ nullable: true })
   @Column({ default: 50 })
   maxProposal: number;

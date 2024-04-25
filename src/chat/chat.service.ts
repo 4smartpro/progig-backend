@@ -38,11 +38,11 @@ export class ChatService {
     } else {
       // Is Connected? if so then send message else send first message
       if (chat.senderId === user.id) {
-        const connection = await this.connectionService.isConnected(
+        const isConnected = await this.connectionService.isConnected(
           user.id,
           payload.receiverId,
         );
-        if (!connection) {
+        if (!isConnected) {
           throw new NotAcceptableException(
             'You cannot send another message before connecting with the user',
           );
