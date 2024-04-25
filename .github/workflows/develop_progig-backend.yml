@@ -21,30 +21,18 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build app
-        run: npm run build --if-present
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build --if-present
+      - name: Zip artifact for deployment
+        run: zip release.zip ./dist package.json package-lock.json -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: |
-            dist/ # Include only the build output directory
-            server.js # Include the main server file, if necessary
-            package.json # Include package.json for environment setup, if necessary
-            package-lock.json # Include package-lock.json for dependency locking, if necessary
-
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -58,10 +46,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      - name: Install dependency within app service
+        run: npm install
       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'progig-backend'
           slot-name: 'Production'
