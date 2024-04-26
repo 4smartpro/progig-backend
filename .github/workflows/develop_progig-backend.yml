@@ -26,7 +26,7 @@ jobs:
           npm install
           npm run build --if-present
       - name: Zip artifact for deployment
-        run: zip release.zip ./dist package.json package-lock.json -r
+        run: zip release.zip . -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -50,8 +50,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: Install dependency within app service
-        run: npm install
       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
