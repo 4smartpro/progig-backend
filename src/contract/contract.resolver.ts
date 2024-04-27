@@ -1,42 +1,35 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ContractService } from './contract.service';
-import { CreateContractInput } from './dto/create-contract.input';
 import { UpdateContractInput } from './dto/update-contract.input';
-import { Contract } from '@app/common';
+import { Contract, CurrentUser, User } from '@app/common';
+import { ContractsResponse } from './dto/get-contracts.dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@auth/guards';
 
 @Resolver(() => Contract)
 export class ContractResolver {
   constructor(private readonly contractService: ContractService) {}
 
-  @Mutation(() => Contract)
-  createContract(
-    @Args('createContractInput') createContractInput: CreateContractInput,
+  @Query(() => ContractsResponse, { name: 'contracts' })
+  @UseGuards(JwtAuthGuard)
+  findAll(
+    @CurrentUser() user: User,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+    @Args('limit', { nullable: true, type: () => Int }) limit?: number,
+    @Args('searchText', { nullable: true }) searchText?: string,
+    @Args('asContractor', { nullable: true }) asContractor?: boolean,
   ) {
-    return this.contractService.create(createContractInput);
-  }
-
-  @Query(() => [Contract], { name: 'contract' })
-  findAll() {
-    return this.contractService.findAll();
+    return this.contractService.findAll({
+      page,
+      limit,
+      searchText,
+      userId: user.id,
+      asContractor,
+    });
   }
 
   @Query(() => Contract, { name: 'contract' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.contractService.findOne(id);
-  }
-
-  @Mutation(() => Contract)
-  updateContract(
-    @Args('updateContractInput') updateContractInput: UpdateContractInput,
-  ) {
-    return this.contractService.update(
-      updateContractInput.id,
-      updateContractInput,
-    );
-  }
-
-  @Mutation(() => Contract)
-  removeContract(@Args('id', { type: () => Int }) id: number) {
-    return this.contractService.remove(id);
   }
 }

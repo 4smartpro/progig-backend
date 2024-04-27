@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateContractInput } from './dto/create-contract.input';
 import { UpdateContractInput } from './dto/update-contract.input';
+import { GetContractsDto } from './dto/get-contracts.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Contract } from '@app/common';
+import { DeepPartial, FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ContractService {
-  create(createContractInput: CreateContractInput) {
-    return 'This action adds a new contract';
+  constructor(
+    @InjectRepository(Contract)
+    private readonly contractRepository: Repository<Contract>,
+  ) {}
+
+  async findAll(params: GetContractsDto) {
+    const where = {};
+
+    if (params.asContractor) {
+      where['contractorId'] = params.userId;
+    } else {
+      where['helperId'] = params.userId;
+    }
+
+    const [entries, total] = await this.contractRepository.findAndCount({
+      where,
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+      relations: ['gig', 'proposal', 'helper', 'contractor'],
+    });
+
+    return {
+      entries,
+      total,
+    };
   }
 
-  findAll() {
-    return `This action returns all contract`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} contract`;
-  }
-
-  update(id: number, updateContractInput: UpdateContractInput) {
-    return `This action updates a #${id} contract`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} contract`;
+  findOne(id: string) {
+    return this.contractRepository.findOne({
+      where: { id },
+      relations: ['gig', 'proposal', 'helper', 'contractor'],
+    });
   }
 }
