@@ -39,9 +39,4 @@ export class ContractResolver {
   removeContract(@Args('id', { type: () => Int }) id: number) {
     return this.contractService.remove(id);
   }
-
-  @Mutation(() => Contract)
-  mitualDiscussion(@Args('id', { type: () => Int }) id: number) {
-    return this.contractService.remove(id);
-  }
 }
