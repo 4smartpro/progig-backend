@@ -180,7 +180,6 @@ type Mutation {
   createGig(createGigInput: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
-  mitualDiscussion(id: Int!): Contract!
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
   removeContract(id: Int!): Contract!
