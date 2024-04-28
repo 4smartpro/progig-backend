@@ -18,7 +18,7 @@ export class GigResolver {
   @Mutation(() => Gig)
   @UseGuards(JwtAuthGuard)
   createGig(
-    @Args('createGigInput') createGigInput: CreateGigInput,
+    @Args('payload') createGigInput: CreateGigInput,
     @CurrentUser() user: User,
   ) {
     return this.gigService.create(createGigInput, user);
@@ -95,8 +95,8 @@ export class GigResolver {
 
   @Mutation(() => Gig)
   @UseGuards(JwtAuthGuard)
-  updateGig(@Args('updateGigInput') updateGigInput: UpdateGigInput) {
-    return this.gigService.update(updateGigInput.id, updateGigInput);
+  updateGig(@Args('payload') updateGigInput: UpdateGigInput) {
+    return this.gigService.update(updateGigInput);
   }
 
   @Mutation(() => Gig)
