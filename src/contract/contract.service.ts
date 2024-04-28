@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateContractInput } from './dto/create-contract.input';
 import { UpdateContractInput } from './dto/update-contract.input';
 import { GetContractsDto } from './dto/get-contracts.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract } from '@app/common';
-import { DeepPartial, FindManyOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ContractService {
@@ -40,5 +39,13 @@ export class ContractService {
       where: { id },
       relations: ['gig', 'proposal', 'helper', 'contractor'],
     });
+  }
+
+  update({ id, ...payload }: UpdateContractInput) {
+    return this.contractRepository.update(id, payload);
+  }
+
+  remove(id: string) {
+    return this.contractRepository.delete(id);
   }
 }

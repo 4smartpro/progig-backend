@@ -1,8 +1,8 @@
-import { CreateContractInput } from './create-contract.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { Contract } from '@app/common';
+import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateContractInput extends PartialType(CreateContractInput) {
-  @Field(() => Int)
-  id: number;
+export class UpdateContractInput extends PartialType(Contract) {
+  @Field(() => ID)
+  id: string;
 }

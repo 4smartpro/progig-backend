@@ -176,7 +176,7 @@ type Message {
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
-  createGig(createGigInput: CreateGigInput!): Gig!
+  createGig(payload: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
   register(payload: CreateUserInput!): RegistrationResponse!
@@ -186,7 +186,7 @@ type Mutation {
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Chat!
   sendProposal(payload: SendProposalInput!): Proposal!
-  updateGig(updateGigInput: UpdateGigInput!): Gig!
+  updateGig(payload: UpdateGigInput!): Gig!
   updateUser(payload: UpdateUserInput!): User!
 }
 
@@ -213,6 +213,7 @@ type Query {
   chats(limit: Int, page: Int, searchText: String): ChatsResponse!
   connections(connectionType: ConnectionType, limit: Int, page: Int, searchText: String, status: ConnectionStatus): ConnectionsResponse!
   contract(id: ID!): Contract!
+  contractUpdate(payload: UpdateContractInput!): Contract!
   contracts(asContractor: Boolean, limit: Int, page: Int, searchText: String): ContractsResponse!
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig
@@ -242,6 +243,10 @@ type Subscription {
   messageAdded(chatId: ID!): Message!
 }
 
+input UpdateContractInput {
+  id: ID!
+}
+
 input UpdateGigInput {
   budget: Float
 
@@ -250,7 +255,7 @@ input UpdateGigInput {
 
   """Mandatory Field"""
   description: String
-  id: Int!
+  id: ID!
   image: String
   jobType: String
   location: String

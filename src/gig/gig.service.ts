@@ -87,8 +87,8 @@ export class GigService {
     return gig;
   }
 
-  update(id: string, updateGigInput: UpdateGigInput) {
-    return this.gigRepository.update(id, updateGigInput);
+  update({ id, ...payload }: UpdateGigInput) {
+    return this.gigRepository.update(id, payload);
   }
 
   remove(id: string) {
