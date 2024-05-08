@@ -272,9 +272,9 @@ input UpdateUserInput {
   bio: String
   category: String
   company: String
-  email: String!
-  firstname: String!
-  lastname: String!
+  email: String
+  firstname: String
+  lastname: String
   phone: String
 }
 
