@@ -1,10 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { ContractService } from './contract.service';
-import { Contract, CurrentUser, User } from '@app/common';
+import { Contract, CurrentUser, User, UserRole } from '@app/common';
 import { ContractsResponse } from './dto/get-contracts.dto';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@auth/guards';
+import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { UpdateContractInput } from './dto/update-contract.input';
+import { UseRoles } from 'src/auth/auth.decorator';
 
 @Resolver(() => Contract)
 export class ContractResolver {
@@ -34,9 +35,17 @@ export class ContractResolver {
     return this.contractService.findOne(id);
   }
 
-  @Query(() => Contract)
-  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Contract)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
   contractUpdate(@Args('payload') payload: UpdateContractInput) {
     return this.contractService.update(payload);
+  }
+
+  @Mutation(() => Contract)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseRoles(UserRole.CONTRACTOR)
+  contractRemove(@Args('id', { nullable: true }) id: string) {
+    return this.contractService.remove(id);
   }
 }

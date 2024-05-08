@@ -137,6 +137,7 @@ type Gig {
   endDate: DateTime
   id: ID!
   image: String
+  isSaved: Boolean!
   jobType: String
   location: String
   maxProposal: Float
@@ -176,6 +177,8 @@ type Message {
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
+  contractRemove(id: String): Contract!
+  contractUpdate(payload: UpdateContractInput!): Contract!
   createGig(payload: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
   login(email: String!, password: String!): LoginResponse!
@@ -213,7 +216,6 @@ type Query {
   chats(limit: Int, page: Int, searchText: String): ChatsResponse!
   connections(connectionType: ConnectionType, limit: Int, page: Int, searchText: String, status: ConnectionStatus): ConnectionsResponse!
   contract(id: ID!): Contract!
-  contractUpdate(payload: UpdateContractInput!): Contract!
   contracts(asContractor: Boolean, limit: Int, page: Int, searchText: String): ContractsResponse!
   conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
   gig(id: ID!): Gig

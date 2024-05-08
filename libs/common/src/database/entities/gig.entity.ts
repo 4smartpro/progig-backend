@@ -76,4 +76,7 @@ export class Gig extends AbstractEntity {
   @Field(() => [Proposal], { defaultValue: [] })
   @OneToMany(() => Proposal, (p) => p.gig)
   proposals: Proposal[];
+
+  @Field(() => Boolean, { defaultValue: false })
+  isSaved: boolean;
 }

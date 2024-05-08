@@ -80,6 +80,16 @@ export class GigService {
       relations: ['contractor', 'proposals'],
     });
 
+    const isSaved = await this.savedGigRepository.findOne({
+      where: {
+        gigId: id,
+        userId: user.id,
+      },
+    });
+
+    gig.isSaved = !!isSaved;
+
+    // If request from helper. Then below show only helper proposal
     if (user.id !== gig.contractorId) {
       gig.proposals = gig.proposals.filter((p) => p.helperId === user.id);
     }
