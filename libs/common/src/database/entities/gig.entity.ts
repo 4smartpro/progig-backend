@@ -56,6 +56,8 @@ export class Gig extends AbstractEntity {
   @Column({ nullable: true })
   location: string;
 
+  // TODO: add these field state, city, zipcode
+
   @Field({ nullable: true })
   @Column({ nullable: true })
   jobType: string;
@@ -68,7 +70,7 @@ export class Gig extends AbstractEntity {
   @Column()
   contractorId: string;
 
-  @Field()
+  @Field({ nullable: true })
   @ManyToOne(() => User)
   @JoinColumn({ name: 'contractorId' })
   contractor: User;
@@ -79,4 +81,6 @@ export class Gig extends AbstractEntity {
 
   @Field(() => Boolean, { defaultValue: false })
   isSaved: boolean;
+
+  // TODO: add new flag if proposal sent
 }

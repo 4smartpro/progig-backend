@@ -1,3 +1,4 @@
+import { Upload } from '@app/common';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
@@ -22,4 +23,18 @@ export class UpdateUserInput {
 
   @Field({ nullable: true })
   phone: string;
+
+  @Field({ nullable: true })
+  state: string;
+
+  @Field({ nullable: true })
+  city: string;
+
+  @Field({ nullable: true })
+  zipcode: string;
+
+  profilePicture?: string;
+
+  @Field(() => Upload, { nullable: true })
+  profilePictureFile: Upload;
 }

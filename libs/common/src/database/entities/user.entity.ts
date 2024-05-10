@@ -32,7 +32,15 @@ export class User extends AbstractEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  location: string;
+  state: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  city: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  zipcode: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })

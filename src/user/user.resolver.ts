@@ -2,13 +2,16 @@ import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards';
-import { CurrentUser, User, UserRole } from '@app/common';
+import { AzureFilesService, CurrentUser, User, UserRole } from '@app/common';
 import { UsersResponse } from './dto/user.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly azureFileService: AzureFilesService,
+  ) {}
   @Query(() => UsersResponse, { name: 'users' })
   @UseGuards(JwtAuthGuard)
   findAll(
@@ -35,10 +38,18 @@ export class UserResolver {
 
   @Mutation(() => User)
   @UseGuards(JwtAuthGuard)
-  updateUser(
+  async updateProfile(
     @Args('payload') payload: UpdateUserInput,
     @CurrentUser() user: User,
   ) {
+    if (payload.profilePictureFile) {
+      const fileurl = await this.azureFileService.uploadFile(
+        payload.profilePictureFile,
+      );
+      payload.profilePicture = fileurl;
+      delete payload.profilePictureFile;
+    }
+
     return this.userService.updateUser(user.id, payload);
   }
 }

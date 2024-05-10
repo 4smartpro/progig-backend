@@ -130,7 +130,7 @@ scalar DateTime
 
 type Gig {
   budget: Float
-  contractor: User!
+  contractor: User
   contractorId: String!
   createdAt: DateTime!
   description: String!
@@ -190,7 +190,7 @@ type Mutation {
   sendMessage(payload: CreateChatInput!): Chat!
   sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(payload: UpdateGigInput!): Gig!
-  updateUser(payload: UpdateUserInput!): User!
+  updateProfile(payload: UpdateUserInput!): User!
 }
 
 type Proposal {
@@ -271,11 +271,15 @@ input UpdateGigInput {
 input UpdateUserInput {
   bio: String
   category: String
+  city: String
   company: String
   email: String
   firstname: String
   lastname: String
   phone: String
+  profilePictureFile: Upload
+  state: String
+  zipcode: String
 }
 
 """File upload scalar type"""
@@ -284,6 +288,7 @@ scalar Upload
 type User {
   bio: String
   category: String
+  city: String
   company: String
   createdAt: DateTime!
   email: String!
@@ -291,11 +296,12 @@ type User {
   id: ID!
   isEmailVerified: Boolean!
   lastname: String!
-  location: String
   phone: String
   profilePicture: String
   role: UserRole!
+  state: String
   updatedAt: DateTime!
+  zipcode: String
 }
 
 enum UserRole {
