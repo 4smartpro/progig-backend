@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from '@app/common';
+import { Connection, User } from '@app/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, In, Not, Repository } from 'typeorm';
 import { UsersResponse } from './dto/user.dto';
 import { FindUserParams } from './dto/find-user.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
@@ -20,6 +20,8 @@ export class UserService {
    */
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Connection)
+    private readonly connectionRepository: Repository<Connection>,
   ) {}
 
   /**
@@ -87,30 +89,43 @@ export class UserService {
   }
 
   async findAll(params: FindUserParams): Promise<UsersResponse> {
-    // const [entries, total] = await this.userRepository.findAndCount({
-    //   where: [{ id: Not(params.userId) }],
-    //   skip: params.page ? (params.page - 1) * params.limit : 0,
-    //   take: params.limit,
-    // });
-    const userQuery = this.userRepository
-      .createQueryBuilder('e')
-      .where({
-        id: Not(params.userId),
-      })
-      .loadRelationIdAndMap('e.connections', 'e.connections', 'c', (query) =>
-        query.andWhere(
-          `c.followingId = :followingId OR c.followerId = :followerId`,
-          {
-            followingId: params.userId,
-            followerId: params.userId,
-          },
-        ),
-      );
+    const [entries, total] = await this.userRepository.findAndCount({
+      where: [{ id: Not(params.userId) }],
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+    });
 
-    const [entries, total] = await userQuery.getManyAndCount();
-    // should add connection status with user
+    return {
+      entries,
+      total,
+    };
+  }
 
-    console.log(entries);
+  async findConnections(params: FindUserParams): Promise<UsersResponse> {
+    const connections = await this.connectionRepository.find({
+      select: { followerId: true, followingId: true },
+    });
+
+    const users = {
+      [params.userId]: 1,
+    };
+
+    connections.forEach((e) => {
+      users[e.followerId] = 1;
+      users[e.followingId] = 1;
+    });
+
+    const excludes = Object.keys(users);
+
+    const [entries, total] = await this.userRepository.findAndCount({
+      where: {
+        id: Not(In(excludes)),
+        role: params.role,
+        firstname: ILike(`%${params.searchText}%`),
+      },
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+    });
 
     return {
       entries,
@@ -119,7 +134,10 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      // relations: ['savedGigs'],
+    });
     if (!user) {
       throw new NotFoundException('User does not exists');
     }

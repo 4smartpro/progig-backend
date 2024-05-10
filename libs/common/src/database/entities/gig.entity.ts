@@ -56,8 +56,6 @@ export class Gig extends AbstractEntity {
   @Column({ nullable: true })
   location: string;
 
-  // TODO: add these field state, city, zipcode
-
   @Field({ nullable: true })
   @Column({ nullable: true })
   jobType: string;

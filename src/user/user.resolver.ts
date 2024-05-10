@@ -12,6 +12,7 @@ export class UserResolver {
     private readonly userService: UserService,
     private readonly azureFileService: AzureFilesService,
   ) {}
+
   @Query(() => UsersResponse, { name: 'users' })
   @UseGuards(JwtAuthGuard)
   findAll(
@@ -22,6 +23,24 @@ export class UserResolver {
     @Args('role', { nullable: true, type: () => UserRole }) role?: UserRole,
   ) {
     return this.userService.findAll({
+      page,
+      limit,
+      searchText,
+      userId: user.id,
+      role,
+    });
+  }
+
+  @Query(() => UsersResponse)
+  @UseGuards(JwtAuthGuard)
+  findConnections(
+    @CurrentUser() user: User,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+    @Args('limit', { nullable: true, type: () => Int }) limit?: number,
+    @Args('searchText', { nullable: true }) searchText?: string,
+    @Args('role', { nullable: true, type: () => UserRole }) role?: UserRole,
+  ) {
+    return this.userService.findConnections({
       page,
       limit,
       searchText,
