@@ -36,6 +36,12 @@ export class UserResolver {
     return this.userService.getUserById(id);
   }
 
+  @Query(() => User)
+  @UseGuards(JwtAuthGuard)
+  async myProfile(@CurrentUser() user: User) {
+    return user;
+  }
+
   @Mutation(() => User)
   @UseGuards(JwtAuthGuard)
   async updateProfile(
@@ -50,6 +56,6 @@ export class UserResolver {
       delete payload.profilePictureFile;
     }
 
-    return this.userService.updateUser(user.id, payload);
+    return this.userService.updateProfile(user, payload);
   }
 }

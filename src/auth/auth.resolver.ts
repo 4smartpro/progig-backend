@@ -1,10 +1,7 @@
-import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { LoginResponse, RegistrationResponse } from './dto/auth-response.dto';
 import { AuthService } from './auth.service';
 import { CreateUserInput } from 'src/user/dto/create-user.dto';
-import { CurrentUser, User } from '@app/common';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from './guards';
 @Resolver('Auth')
 export class AuthResolver {
   constructor(private authService: AuthService) {}
@@ -26,12 +23,5 @@ export class AuthResolver {
       message: 'Registration successful!',
       user,
     };
-  }
-
-  @Query(() => User)
-  @UseGuards(JwtAuthGuard)
-  async myProfile(@CurrentUser() user: User) {
-    console.log(user);
-    return user;
   }
 }

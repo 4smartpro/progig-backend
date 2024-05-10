@@ -60,6 +60,28 @@ export class UserService {
     return user;
   }
 
+  async updateProfile(
+    user: User,
+    updateUserInput: UpdateUserInput,
+  ): Promise<User> {
+    if (updateUserInput.email) {
+      const exists = await this.userRepository.findOne({
+        where: { email: updateUserInput.email, id: Not(user.id) },
+      });
+
+      if (exists) {
+        throw new BadRequestException(
+          'This email already exists with other user',
+        );
+      }
+    }
+
+    Object.assign(user, updateUserInput);
+    await user.save();
+
+    return user;
+  }
+
   async findOne(email: string): Promise<User> {
     return this.userRepository.findOne({ where: { email } });
   }
