@@ -221,6 +221,7 @@ type Query {
   gig(id: ID!): Gig
   gigs(contractorId: String, limit: Int, page: Int, searchText: String): GigsResponse!
   myGigs(limit: Int, page: Int, searchText: String): GigsResponse!
+  myProfile: User!
   myProposals(limit: Int, page: Int, searchText: String): ProposalsResponse!
   proposals(gigId: ID!): [Proposal!]!
   savedGigs(limit: Int, page: Int, searchText: String): GigsResponse!
