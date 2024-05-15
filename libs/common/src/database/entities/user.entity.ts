@@ -1,4 +1,4 @@
-import { Entity, Column, BeforeInsert, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AbstractEntity } from '../abstract.entity';
