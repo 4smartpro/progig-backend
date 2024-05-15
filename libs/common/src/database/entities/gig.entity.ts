@@ -68,8 +68,8 @@ export class Gig extends AbstractEntity {
   @Column()
   contractorId: string;
 
-  @Field({ nullable: true })
-  @ManyToOne(() => User)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (c) => c.gigs)
   @JoinColumn({ name: 'contractorId' })
   contractor: User;
 

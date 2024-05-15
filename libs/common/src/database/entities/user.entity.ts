@@ -2,6 +2,7 @@ import { Entity, Column, BeforeInsert, OneToMany, ManyToOne } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AbstractEntity } from '../abstract.entity';
+import { Gig } from './gig.entity';
 import { SavedGig } from './saved-gig.entity';
 
 export enum UserRole {
@@ -78,8 +79,13 @@ export class User extends AbstractEntity {
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  // @OneToMany(() => SavedGig, (s) => s.user)
-  // savedGigs: SavedGig[];
+  @Field(() => [Gig], { defaultValue: [] })
+  @OneToMany(() => Gig, (p) => p.contractor)
+  gigs: Gig[];
+
+  @Field(() => [SavedGig], { defaultValue: [] })
+  @OneToMany(() => SavedGig, (p) => p.user)
+  savedGigs: SavedGig[];
 
   @BeforeInsert()
   async hashPassword() {

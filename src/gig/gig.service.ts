@@ -94,6 +94,8 @@ export class GigService {
       gig.proposals = gig.proposals.filter((p) => p.helperId === user.id);
     }
 
+    gig.noOfProposals = gig.proposals.length;
+
     return gig;
   }
 

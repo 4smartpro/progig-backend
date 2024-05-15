@@ -133,11 +133,23 @@ export class UserService {
     };
   }
 
-  async getUserById(id: string): Promise<User> {
+  async getUserById(id: string, tag?: string): Promise<User> {
+    let relations = ['gigs'];
+
+    if (tag === 'AUTH') {
+      relations = [
+        ...relations,
+        'savedGigs',
+        'savedGigs.user',
+        'savedGigs.gig',
+      ];
+    }
+
     const user = await this.userRepository.findOne({
       where: { id },
-      // relations: ['savedGigs'],
+      relations,
     });
+
     if (!user) {
       throw new NotFoundException('User does not exists');
     }

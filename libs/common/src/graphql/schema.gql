@@ -235,6 +235,16 @@ type RegistrationResponse {
   user: User!
 }
 
+type SavedGig {
+  createdAt: DateTime!
+  gig: Gig
+  gigId: String!
+  id: ID!
+  updatedAt: DateTime!
+  user: User
+  userId: String!
+}
+
 input SendProposalInput {
   """Mandatory Field"""
   coverLetter: String!
@@ -295,12 +305,14 @@ type User {
   createdAt: DateTime!
   email: String!
   firstname: String
+  gigs: [Gig!]!
   id: ID!
   isEmailVerified: Boolean!
   lastname: String!
   phone: String
   profilePicture: String
   role: UserRole!
+  savedGigs: [SavedGig!]!
   state: String
   updatedAt: DateTime!
   zipcode: String
