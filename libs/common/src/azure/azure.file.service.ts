@@ -7,7 +7,6 @@ import * as crypto from 'crypto';
 export class AzureFilesService {
   constructor(private configService: ConfigService) {}
   private containerName = 'assets';
-  private logger = new Logger();
 
   private async getBlobServiceInstance() {
     const connectionString = this.configService.get('AZURE_CONNECTION_STRING');
@@ -24,7 +23,31 @@ export class AzureFilesService {
     return blockBlobClient;
   }
 
-  public async uploadFile(_file: any, containerName?: string): Promise<string> {
+  public async singleUpload(
+    _file: any,
+    containerName?: string,
+  ): Promise<string> {
+    if (containerName) this.containerName = containerName;
+
+    const file = await _file;
+    const extension = file.filename.split('.').pop();
+    const file_name = crypto.randomUUID() + '.' + extension;
+    const blockBlobClient = await this.getBlobClient(file_name);
+    const fileUrl = blockBlobClient.url;
+
+    const stream = file.createReadStream();
+
+    const buffer = await this.streamToBuffer(stream);
+
+    await blockBlobClient.uploadData(buffer);
+
+    return fileUrl;
+  }
+
+  public async multipleUpload(
+    _file: any,
+    containerName?: string,
+  ): Promise<string> {
     if (containerName) this.containerName = containerName;
 
     const file = await _file;

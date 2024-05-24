@@ -101,7 +101,7 @@ input CreateGigInput {
 
   """Mandatory Field"""
   description: String!
-  image: String
+  images: [Upload!]
   jobType: String
   location: String
   paymentMethod: String
@@ -270,7 +270,7 @@ input UpdateGigInput {
   """Mandatory Field"""
   description: String
   id: ID!
-  image: String
+  images: [Upload!]
   jobType: String
   location: String
   paymentMethod: String

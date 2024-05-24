@@ -1,3 +1,4 @@
+import { Upload } from '@app/common';
 import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
@@ -26,6 +27,6 @@ export class CreateGigInput {
   @Field({ nullable: true })
   jobType: string;
 
-  @Field({ nullable: true })
-  image: string;
+  @Field(() => [Upload], { nullable: true })
+  images: Upload[];
 }

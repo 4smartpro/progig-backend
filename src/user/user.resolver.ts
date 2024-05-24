@@ -68,7 +68,7 @@ export class UserResolver {
     @CurrentUser() user: User,
   ) {
     if (payload.profilePictureFile) {
-      const fileurl = await this.azureFileService.uploadFile(
+      const fileurl = await this.azureFileService.singleUpload(
         payload.profilePictureFile,
       );
       payload.profilePicture = fileurl;

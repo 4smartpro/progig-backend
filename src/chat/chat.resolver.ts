@@ -37,7 +37,7 @@ export class ChatResolver {
     @CurrentUser() user: User,
   ) {
     if (payload.file) {
-      const fileurl = await this.azureFileService.uploadFile(payload.file);
+      const fileurl = await this.azureFileService.singleUpload(payload.file);
       payload.attachment = fileurl;
     }
 
