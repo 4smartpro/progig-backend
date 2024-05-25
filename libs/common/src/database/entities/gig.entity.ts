@@ -1,7 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { AbstractEntity, Proposal } from '@app/common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User } from './user.entity';
+import { Content } from './content.entity';
 
 export enum GigStatus {
   OPEN = 'OPEN',
@@ -63,6 +72,11 @@ export class Gig extends AbstractEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   image: string;
+
+  @Field(() => [Content], { defaultValue: [] })
+  @ManyToMany(() => Content)
+  @JoinTable()
+  images: Content[];
 
   @Field()
   @Column()

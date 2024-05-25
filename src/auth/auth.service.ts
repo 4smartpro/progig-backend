@@ -74,6 +74,16 @@ export class AuthService {
     return user;
   }
 
+  async validateJwtUser(userId: string): Promise<User> {
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+
+    return user;
+  }
+
   async logout(user: User, response: Response): Promise<void> {
     response.clearCookie('Authorization', { httpOnly: true });
   }

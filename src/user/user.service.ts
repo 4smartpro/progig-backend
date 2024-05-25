@@ -133,27 +133,38 @@ export class UserService {
     };
   }
 
-  async getUserById(id: string, tag?: string): Promise<User> {
-    let relations = ['gigs'];
+  // async getUserById(id: string, tag?: string): Promise<User> {
+  //   let relations = ['gigs'];
 
-    if (tag === 'AUTH') {
-      relations = [
-        ...relations,
-        'savedGigs',
-        'savedGigs.user',
-        'savedGigs.gig',
-      ];
-    }
+  //   if (tag === 'AUTH') {
+  //     relations = [
+  //       ...relations,
+  //       'savedGigs',
+  //       'savedGigs.user',
+  //       'savedGigs.gig',
+  //     ];
+  //   }
 
-    const user = await this.userRepository.findOne({
+  //   const user = await this.userRepository.findOne({
+  //     where: { id },
+  //     relations,
+  //   });
+
+  //   if (!user) {
+  //     let message = 'User does not exists';
+  //     if (tag === 'AUTH') {
+  //       message = 'Unauthorized';
+  //     }
+  //     throw new NotFoundException(message);
+  //   }
+
+  //   return user;
+  // }
+
+  async getUserById(id: string): Promise<User> {
+    return this.userRepository.findOne({
       where: { id },
-      relations,
+      relations: ['gigs', 'savedGigs', 'savedGigs.user', 'savedGigs.gig'],
     });
-
-    if (!user) {
-      throw new NotFoundException('User does not exists');
-    }
-
-    return user;
   }
 }

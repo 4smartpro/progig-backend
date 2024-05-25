@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { GigsResponse } from './dto/gigs.dto';
 import {
+  AzureFilesService,
   Contract,
   Gig,
   Proposal,
@@ -21,6 +22,7 @@ import {
 import { SendProposalInput } from './dto/send-proposal.dto';
 import { GetMyProposalDto } from './dto/get-proposals.dto';
 import { SaveGigInput } from './dto/save-gig.dto';
+import { Content } from '@app/common/database/entities/content.entity';
 
 @Injectable()
 export class GigService {
@@ -36,12 +38,37 @@ export class GigService {
 
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<Contract>,
+
+    @InjectRepository(Content)
+    private readonly contentRepository: Repository<Content>,
+
+    private readonly azureFileService: AzureFilesService,
   ) {}
 
-  async create(createGigInput: CreateGigInput, user: User) {
-    return this.gigRepository
-      .create({ ...createGigInput, contractorId: user.id })
+  async create({ images, ...payload }: CreateGigInput, user: User) {
+    const gig = await this.gigRepository
+      .create({ ...payload, contractorId: user.id, images: [] })
       .save();
+
+    if (images.length > 0) {
+      const attachments = [];
+      for (const image of images) {
+        const fileurl = await this.azureFileService.singleUpload(image);
+        attachments.push(fileurl);
+      }
+
+      if (attachments.length > 0) {
+        const contents = await this.contentRepository.insert(
+          attachments.map((s) => ({ url: s, user_id: user.id })),
+        );
+
+        gig.images = contents.identifiers as Content[];
+
+        await gig.save();
+      }
+    }
+
+    return gig;
   }
 
   async findAll(params: {
@@ -77,7 +104,7 @@ export class GigService {
   async findOne(id: string, user: User) {
     const gig = await this.gigRepository.findOne({
       where: { id },
-      relations: ['contractor', 'proposals'],
+      relations: ['contractor', 'proposals', 'images'],
     });
 
     const isSaved = await this.savedGigRepository.findOne({

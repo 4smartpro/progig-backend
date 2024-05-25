@@ -44,26 +44,30 @@ export class AzureFilesService {
     return fileUrl;
   }
 
-  public async multipleUpload(
-    _file: any,
-    containerName?: string,
-  ): Promise<string> {
-    if (containerName) this.containerName = containerName;
+  // public async multipleUpload(
+  //   _files: any[],
+  //   containerName?: string,
+  // ): Promise<string> {
+  //   if (containerName) this.containerName = containerName;
 
-    const file = await _file;
-    const extension = file.filename.split('.').pop();
-    const file_name = crypto.randomUUID() + '.' + extension;
-    const blockBlobClient = await this.getBlobClient(file_name);
-    const fileUrl = blockBlobClient.url;
+  //   const buffers = [];
+  //   for (const _file of _files) {
+  //     const file = await _file;
+  //     const extension = file.filename.split('.').pop();
+  //     const file_name = crypto.randomUUID() + '.' + extension;
+  //     const blockBlobClient = await this.getBlobClient(file_name);
+  //     const fileUrl = blockBlobClient.url;
 
-    const stream = file.createReadStream();
+  //     const stream = file.createReadStream();
 
-    const buffer = await this.streamToBuffer(stream);
+  //     const buffer = await this.streamToBuffer(stream);
+  //     buffers.push(buffer);
+  //   }
 
-    await blockBlobClient.uploadData(buffer);
+  //   await blockBlobClient.uploadData(buffers);
 
-    return fileUrl;
-  }
+  //   return fileUrl;
+  // }
 
   private async streamToBuffer(stream): Promise<Buffer> {
     return new Promise((resolve, reject) => {

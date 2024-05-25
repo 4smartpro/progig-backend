@@ -2,10 +2,19 @@ import { Module } from '@nestjs/common';
 import { GigService } from './gig.service';
 import { GigResolver } from './gig.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Contract, Gig, Proposal, SavedGig } from '@app/common';
+import {
+  AzureFilesService,
+  Content,
+  Contract,
+  Gig,
+  Proposal,
+  SavedGig,
+} from '@app/common';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Gig, Proposal, SavedGig, Contract])],
-  providers: [GigResolver, GigService],
+  imports: [
+    TypeOrmModule.forFeature([Gig, Proposal, SavedGig, Contract, Content]),
+  ],
+  providers: [GigResolver, GigService, AzureFilesService],
 })
 export class GigModule {}

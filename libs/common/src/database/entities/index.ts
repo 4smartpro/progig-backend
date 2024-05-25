@@ -9,3 +9,4 @@ export * from './chat.entity';
 export * from './connection.entity';
 export * from './message.entity';
 export * from './saved-gig.entity';
+export * from './content.entity';

@@ -52,6 +52,13 @@ type ConnectionsResponse {
   total: Int!
 }
 
+type Content {
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+  url: String!
+}
+
 type Contract {
   contractor: User
   contractorId: String!
@@ -137,6 +144,7 @@ type Gig {
   endDate: DateTime
   id: ID!
   image: String
+  images: [Content!]!
   isSaved: Boolean!
   jobType: String
   location: String
@@ -262,22 +270,21 @@ input UpdateContractInput {
 }
 
 input UpdateGigInput {
-  budget: Float
+  budget: Float!
 
   """Mandatory Field"""
-  deadline: DateTime
+  deadline: DateTime!
 
   """Mandatory Field"""
-  description: String
+  description: String!
   id: ID!
-  images: [Upload!]
   jobType: String
   location: String
   paymentMethod: String
   requirements: String
 
   """Mandatory Field"""
-  title: String
+  title: String!
 }
 
 input UpdateUserInput {
