@@ -60,6 +60,7 @@ export class ChatService {
     if (file) {
       const fileurl = await this.azureFileService.singleUpload(file);
       message.attachment = fileurl;
+      await message.save();
     }
 
     chat.lastMessage = message;
