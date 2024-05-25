@@ -6,7 +6,7 @@ services:
       target: development
     command: npm run start:dev
     container_name: progig-backend
-    env_file: ~/environments/.env
+    env_file: /home/azureuser/environments/.env
     depends_on:
       - postgres
       # - mysql
@@ -21,7 +21,7 @@ services:
     container_name: progig-postgres
     ports:
       - '5432:5432'
-    env_file: ~/environments/.env
+    env_file: /home/azureuser/environments/.env
     volumes:
       - ./data/postgres/:/var/lib/postgresql/data/:rw
 
