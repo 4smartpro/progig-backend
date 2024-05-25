@@ -120,7 +120,7 @@ export class ConnectionService {
     return 'Deleted successfully';
   }
 
-  async isConnected(followingId: string, followerId: string) {
+  async isConnected(followerId: string, followingId: string) {
     return this.connectionRepository.findOne({
       where: [
         { followerId, followingId, status: ConnectionStatus.ACCEPTED },

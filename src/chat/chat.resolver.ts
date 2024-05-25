@@ -8,13 +8,7 @@ import {
   Int,
 } from '@nestjs/graphql';
 import { ChatService } from './chat.service';
-import {
-  AzureFilesService,
-  Chat,
-  CurrentUser,
-  Message,
-  User,
-} from '@app/common';
+import { Chat, CurrentUser, Message, User } from '@app/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards';
 import { CreateChatInput } from './dto/create-chat.dto';
@@ -25,10 +19,7 @@ import { PubSub } from 'graphql-subscriptions';
 const pubSub = new PubSub();
 @Resolver(() => Chat)
 export class ChatResolver {
-  constructor(
-    private readonly chatService: ChatService,
-    private readonly azureFileService: AzureFilesService,
-  ) {}
+  constructor(private readonly chatService: ChatService) {}
 
   @Mutation(() => Chat)
   @UseGuards(JwtAuthGuard)
@@ -36,11 +27,6 @@ export class ChatResolver {
     @Args('payload') payload: CreateChatInput,
     @CurrentUser() user: User,
   ) {
-    if (payload.file) {
-      const fileurl = await this.azureFileService.singleUpload(payload.file);
-      payload.attachment = fileurl;
-    }
-
     const chat = await this.chatService.sendMessage(payload, user);
     pubSub.publish('messageAdded', { messageAdded: chat.lastMessage });
     return chat;

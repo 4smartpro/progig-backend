@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Chat, Message, User } from '@app/common';
+import { AzureFilesService, Chat, Message, User } from '@app/common';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
@@ -19,9 +19,10 @@ export class ChatService {
 
     private readonly userService: UserService,
     private readonly connectionService: ConnectionService,
+    private readonly azureFileService: AzureFilesService,
   ) {}
 
-  async sendMessage(payload: CreateChatInput, user: User) {
+  async sendMessage({ file, ...payload }: CreateChatInput, user: User) {
     let chat = await this.chatRepository.findOne({
       where: [
         { senderId: user.id, receiverId: payload.receiverId },
@@ -29,6 +30,8 @@ export class ChatService {
       ],
       relations: ['sender', 'receiver'],
     });
+
+    console.log(chat, payload.receiverId);
 
     if (!chat) {
       const receiver = await this.userService.getUserById(payload.receiverId);
@@ -54,7 +57,14 @@ export class ChatService {
       .create({ message: payload.message, sender: user, chatId: chat.id })
       .save();
 
+    if (file) {
+      const fileurl = await this.azureFileService.singleUpload(file);
+      message.attachment = fileurl;
+    }
+
     chat.lastMessage = message;
+
+    console.log(chat);
 
     await chat.save();
 
