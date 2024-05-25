@@ -21,15 +21,15 @@ const pubSub = new PubSub();
 export class ChatResolver {
   constructor(private readonly chatService: ChatService) {}
 
-  @Mutation(() => Chat)
+  @Mutation(() => Message)
   @UseGuards(JwtAuthGuard)
   async sendMessage(
     @Args('payload') payload: CreateChatInput,
     @CurrentUser() user: User,
   ) {
-    const chat = await this.chatService.sendMessage(payload, user);
-    pubSub.publish('messageAdded', { messageAdded: chat.lastMessage });
-    return chat;
+    const message = await this.chatService.sendMessage(payload, user);
+    pubSub.publish('messageAdded', { messageAdded: message });
+    return message;
   }
 
   @Query(() => ChatsResponse, { name: 'chats' })

@@ -57,8 +57,6 @@ export class UserService {
     Object.assign(user, updateUserInput);
     await user.save();
 
-    console.log(user);
-
     return user;
   }
 

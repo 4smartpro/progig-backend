@@ -31,8 +31,6 @@ export class ChatService {
       relations: ['sender', 'receiver'],
     });
 
-    console.log(chat, payload.receiverId);
-
     if (!chat) {
       const receiver = await this.userService.getUserById(payload.receiverId);
       chat = await this.chatRepository
@@ -65,11 +63,9 @@ export class ChatService {
 
     chat.lastMessage = message;
 
-    console.log(chat);
-
     await chat.save();
 
-    return chat;
+    return message;
   }
 
   async getChats(params: {

@@ -195,7 +195,7 @@ type Mutation {
   removeGig(id: String!): Gig!
   saveUnsaveGig(gigId: ID): ID
   sendConnectionRequest(followingId: ID!): Connection!
-  sendMessage(payload: CreateChatInput!): Chat!
+  sendMessage(payload: CreateChatInput!): Message!
   sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(payload: UpdateGigInput!): Gig!
   updateProfile(payload: UpdateUserInput!): User!
