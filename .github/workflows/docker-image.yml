@@ -1,0 +1,24 @@
+name: Docker Image CI PUBLISH
+
+on:
+  push:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build the Docker image For Production
+        if: endsWith(github.ref, '/main')
+        run: docker-compose up --build -V -d
+          
+
+      - name: Build the Docker image For Development
+        if: endsWith(github.ref, '/develop')
+        run: docker-compose -f docker-compose.dev.yml up --build -d
+
+      - name: Remove Intermadiate Images
+        run: docker images -q -f "dangling=true" | xargs -r docker rmi -f
