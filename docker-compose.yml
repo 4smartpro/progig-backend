@@ -6,12 +6,12 @@ services:
       target: development
     command: npm run start:dev
     container_name: progig-backend
-    env_file: .env
+    env_file: ~/environments/.env
     depends_on:
       - postgres
       # - mysql
     ports:
-      - '3010:3010'
+      - '80:3010'
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -21,7 +21,7 @@ services:
     container_name: progig-postgres
     ports:
       - '5432:5432'
-    env_file: .env
+    env_file: ~/environments/.env
     volumes:
       - ./data/postgres/:/var/lib/postgresql/data/:rw
 
