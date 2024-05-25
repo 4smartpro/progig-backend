@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
 import { ConnectionService } from 'src/connection/connection.service';
+import { GetConversationDto } from './dto/get-conversation.dto';
 
 @Injectable()
 export class ChatService {
@@ -87,16 +88,39 @@ export class ChatService {
     };
   }
 
-  async getConversations(params: {
-    searchText: string;
-    limit: number;
-    page: number;
-    chatId: string;
-  }): Promise<ConversationsResponse> {
+  async getConversations({
+    searchText,
+    limit,
+    page,
+    chatId,
+    userId,
+    participantId,
+  }: GetConversationDto): Promise<ConversationsResponse> {
+    const where: any = {};
+    if (chatId) {
+      where.chatId = chatId;
+    } else if (participantId) {
+      const chat = await this.chatRepository.findOne({
+        where: [
+          { senderId: userId, receiverId: participantId },
+          { senderId: participantId, receiverId: userId },
+        ],
+      });
+
+      if (chat) {
+        where.chatId = chat.id;
+      }
+    } else {
+      return {
+        entries: [],
+        total: 0,
+      };
+    }
+
     const [entries, total] = await this.messageRepository.findAndCount({
-      where: { chatId: params.chatId },
-      skip: params.page ? (params.page - 1) * params.limit : 0,
-      take: params.limit,
+      where,
+      skip: page ? (page - 1) * limit : 0,
+      take: limit,
       relations: ['sender'],
     });
 

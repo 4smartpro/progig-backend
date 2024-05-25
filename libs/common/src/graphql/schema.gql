@@ -225,7 +225,7 @@ type Query {
   connections(connectionType: ConnectionType, limit: Int, page: Int, searchText: String, status: ConnectionStatus): ConnectionsResponse!
   contract(id: ID!): Contract!
   contracts(asContractor: Boolean, limit: Int, page: Int, searchText: String): ContractsResponse!
-  conversations(chatId: ID!, limit: Int, page: Int, searchText: String): ConversationsResponse!
+  conversations(chatId: ID, limit: Int, page: Int, participantId: ID, searchText: String): ConversationsResponse!
   findConnections(limit: Int, page: Int, role: UserRole, searchText: String): UsersResponse!
   gig(id: ID!): Gig
   gigs(contractorId: String, limit: Int, page: Int, searchText: String): GigsResponse!

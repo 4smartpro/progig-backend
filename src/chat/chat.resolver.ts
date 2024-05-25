@@ -51,7 +51,10 @@ export class ChatResolver {
   @Query(() => ConversationsResponse, { name: 'conversations' })
   @UseGuards(JwtAuthGuard)
   findAllConversations(
-    @Args('chatId', { type: () => ID }) chatId?: string,
+    @CurrentUser() user: User,
+    @Args('chatId', { type: () => ID, nullable: true }) chatId?: string,
+    @Args('participantId', { type: () => ID, nullable: true })
+    participantId?: string,
     @Args('page', { nullable: true, type: () => Int }) page?: number,
     @Args('limit', { nullable: true, type: () => Int }) limit?: number,
     @Args('searchText', { nullable: true }) searchText?: string,
@@ -61,6 +64,8 @@ export class ChatResolver {
       limit,
       searchText,
       chatId,
+      userId: user.id,
+      participantId,
     });
   }
 
