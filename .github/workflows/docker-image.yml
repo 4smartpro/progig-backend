@@ -2,7 +2,7 @@ name: Docker Image CI PUBLISH
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ['main', 'develop']
 
 jobs:
   build:
@@ -11,10 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Clean up workspace
+        run: rm -rf /home/azureuser/actions-runner/_work/progig-backend/progig-backend || true
+
+      - name: Fix permissions
+        run: sudo chmod -R 777 /home/azureuser/actions-runner/_work/progig-backend/progig-backend
+
+      - name: Change ownership
+        run: sudo chown -R azureuser:azureuser /home/azureuser/actions-runner/_work/progig-backend/progig-backend
+
       - name: Build the Docker image For Production
         if: endsWith(github.ref, '/main')
         run: docker-compose up --build -V -d
-          
 
       - name: Build the Docker image For Development
         if: endsWith(github.ref, '/develop')
