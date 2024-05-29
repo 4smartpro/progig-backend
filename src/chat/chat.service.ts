@@ -89,7 +89,6 @@ export class ChatService {
   }
 
   async getConversations({
-    searchText,
     limit,
     page,
     chatId,
@@ -122,6 +121,7 @@ export class ChatService {
       skip: page ? (page - 1) * limit : 0,
       take: limit,
       relations: ['sender'],
+      order: { createdAt: 'DESC' },
     });
 
     return {
