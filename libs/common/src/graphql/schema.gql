@@ -13,11 +13,10 @@ type Chat {
   id: ID!
   lastMessage: Message
   lastMessageId: String
-  receiver: User
   receiverId: String
-  sender: User
   senderId: String
   updatedAt: DateTime!
+  user: User
 }
 
 type ChatsResponse {
@@ -182,6 +181,11 @@ type Message {
   updatedAt: DateTime!
 }
 
+type MessageResponse {
+  chat: Chat!
+  message: Message!
+}
+
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
@@ -262,7 +266,7 @@ input SendProposalInput {
 }
 
 type Subscription {
-  messageAdded(chatId: ID!): Message!
+  messageAdded(chatId: ID!): MessageResponse!
 }
 
 input UpdateContractInput {

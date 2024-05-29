@@ -25,7 +25,6 @@ export class Chat extends AbstractEntity {
   @Column()
   senderId: string;
 
-  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'senderId' })
   sender: User;
@@ -34,10 +33,12 @@ export class Chat extends AbstractEntity {
   @Column()
   receiverId: string;
 
-  @Field(() => User, { nullable: true })
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'receiverId' })
   receiver: User;
+
+  @Field(() => User, { nullable: true })
+  user: User;
 
   @Field(() => [Message], { defaultValue: [] })
   @OneToMany(() => Message, (s) => s.chat)
