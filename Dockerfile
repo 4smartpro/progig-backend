@@ -10,12 +10,6 @@ COPY . .
 
 RUN npm run build
 
-# Change ownership of the 'dist' folder to 'azureuser'
-RUN chown -R azureuser:azureuser dist
-
-# Switch to 'azureuser'
-USER azureuser
-
 
 FROM node:18 As production
 
