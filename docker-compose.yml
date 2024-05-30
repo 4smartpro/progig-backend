@@ -8,12 +8,12 @@ services:
     container_name: progig-backend
     env_file: /home/azureuser/environments/.env
     # depends_on:
-      # - postgres
-      # - mysql
+    # - postgres
+    # - mysql
     ports:
       - '80:3010'
     volumes:
-      - .:/usr/src/app
+      - progig-backend:/usr/src/app
       - /usr/src/app/node_modules
 
   # postgres:
@@ -39,3 +39,6 @@ services:
   #     MYSQL_PASSWORD: password123 # the password of the mysql user
   #   ports:
   #     - '3300:3306'
+
+volumes:
+  progig-backend: {}
