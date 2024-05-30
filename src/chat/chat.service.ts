@@ -66,7 +66,7 @@ export class ChatService {
 
     await chat.save();
 
-    return message;
+    return { message, chat };
   }
 
   async getChats(params: {
