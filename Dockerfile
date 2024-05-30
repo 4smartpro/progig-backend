@@ -1,9 +1,5 @@
 FROM node:18 As development
 
-# Create a new user and group 'azureuser' with the same UID and GID as your local user
-RUN groupadd -g 1000 azureuser && \
-    useradd -r -u 1000 -g azureuser azureuser
-
 WORKDIR /usr/src/app
 
 COPY package*.json ./
