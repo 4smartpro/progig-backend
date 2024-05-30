@@ -1,5 +1,9 @@
 FROM node:18 As development
 
+# Create a new user and group 'azureuser' with the same UID and GID as your local user
+RUN groupadd -g 1000 azureuser && \
+    useradd -r -u 1000 -g azureuser azureuser
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -9,6 +13,12 @@ RUN npm install || true
 COPY . .
 
 RUN npm run build
+
+# Change ownership of the 'dist' folder to 'azureuser'
+RUN chown -R azureuser:azureuser dist
+
+# Switch to 'azureuser'
+USER azureuser
 
 
 FROM node:18 As production
