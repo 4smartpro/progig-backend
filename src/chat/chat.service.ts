@@ -70,7 +70,12 @@ export class ChatService {
       where: { chatId: chat.id, senderId: user.id, seen: false },
     });
 
+    const findTotalUnseen = await this.findTotalUnseen(payload.receiverId);
+
     chat.unseen = unread;
+    chat.totalUnseen = findTotalUnseen.unseen;
+
+    console.log(chat);
 
     return { message, chat };
   }
@@ -138,5 +143,19 @@ export class ChatService {
 
   findOne(id: string) {
     return this.chatRepository.findOne({ where: { id } });
+  }
+
+  findTotalUnseen(userId: string) {
+    return this.chatRepository
+      .createQueryBuilder('chat')
+      .where({ senderId: userId })
+      .orWhere({ receiverId: userId })
+      .loadRelationCountAndMap(
+        'chat.unseen',
+        'chat.conversations',
+        'message',
+        (query) => query.andWhere(`message.seen = :seen`, { seen: false }),
+      )
+      .getOne();
   }
 }

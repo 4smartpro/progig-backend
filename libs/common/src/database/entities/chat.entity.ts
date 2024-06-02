@@ -54,6 +54,9 @@ export class Chat extends AbstractEntity {
 
   @Field({ defaultValue: 0 })
   unseen: number;
+
+  @Field({ defaultValue: 0 })
+  totalUnseen: number;
 }
 
 @ObjectType()

@@ -17,6 +17,7 @@ type Chat {
   receiverId: String
   sender: User
   senderId: String
+  totalUnseen: Float!
   unseen: Float!
   updatedAt: DateTime!
 }
