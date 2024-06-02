@@ -4,14 +4,7 @@ import { CreateGigInput } from './dto/create-gig.dto';
 import { UpdateGigInput } from './dto/update-gig.dto';
 import { GigsResponse } from './dto/gigs.dto';
 import { UseGuards } from '@nestjs/common';
-import {
-  AzureFilesService,
-  CurrentUser,
-  Gig,
-  Proposal,
-  User,
-  UserRole,
-} from '@app/common';
+import { CurrentUser, Gig, Proposal, User, UserRole } from '@app/common';
 import { JwtAuthGuard, RolesGuard } from '@auth/guards';
 import { SendProposalInput } from './dto/send-proposal.dto';
 import { UseRoles } from 'src/auth/auth.decorator';

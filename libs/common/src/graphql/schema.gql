@@ -112,6 +112,7 @@ input CreateGigInput {
   jobType: String
   location: String
   paymentMethod: String
+  paymentType: String
   requirements: String
 
   """Mandatory Field"""
@@ -151,6 +152,7 @@ type Gig {
   maxProposal: Float
   noOfProposals: Float
   paymentMethod: String
+  paymentType: String
   proposals: [Proposal!]!
   requirements: String
   startDate: DateTime

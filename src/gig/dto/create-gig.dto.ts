@@ -22,6 +22,9 @@ export class CreateGigInput {
   paymentMethod: string;
 
   @Field({ nullable: true })
+  paymentType: string;
+
+  @Field({ nullable: true })
   location: string;
 
   @Field({ nullable: true })

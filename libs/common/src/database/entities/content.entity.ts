@@ -18,4 +18,7 @@ export class Content extends AbstractEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ nullable: true })
+  ref: string;
 }
