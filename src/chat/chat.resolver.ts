@@ -27,6 +27,7 @@ export class ChatResolver {
     @Args('payload') payload: CreateChatInput,
     @CurrentUser() user: User,
   ) {
+    console.log(user.id, payload.receiverId);
     const { message, chat } = await this.chatService.sendMessage(payload, user);
     pubSub.publish('messageAdded', { messageAdded: message });
     pubSub.publish('chatAdded', { chatAdded: chat });
@@ -83,11 +84,21 @@ export class ChatResolver {
 
   @Subscription(() => Chat, {
     filter: (
-      payload: { chatAdded: { receiverId: string; senderId: string } },
+      { chatAdded }: { chatAdded: Chat },
       variables: { userId: string },
-    ) =>
-      payload.chatAdded.receiverId === variables.userId ||
-      payload.chatAdded.senderId === variables.userId,
+    ) => {
+      Object.assign(chatAdded, {
+        unseen:
+          chatAdded.lastMessage.senderId !== variables.userId
+            ? chatAdded.unseen
+            : 0,
+      });
+
+      return (
+        chatAdded.receiverId === variables.userId ||
+        chatAdded.senderId === variables.userId
+      );
+    },
   })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   chatAdded(@Args('userId', { type: () => ID }) _userId: string) {

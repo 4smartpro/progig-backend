@@ -2,7 +2,7 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AzureFilesService, Chat, Message, User } from '@app/common';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
@@ -65,6 +65,12 @@ export class ChatService {
     chat.lastMessage = message;
 
     await chat.save();
+
+    const unread = await this.messageRepository.count({
+      where: { chatId: chat.id, senderId: user.id, seen: false },
+    });
+
+    chat.unseen = unread;
 
     return { message, chat };
   }
