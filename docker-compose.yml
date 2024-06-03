@@ -13,7 +13,7 @@ services:
     ports:
       - '80:3010'
     volumes:
-      - progig-backend:/usr/src/app
+      - .:/usr/src/app
       - /usr/src/app/node_modules
 
   # postgres:
