@@ -2,7 +2,7 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AzureFilesService, Chat, Message, User } from '@app/common';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
