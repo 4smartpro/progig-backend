@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Switch to Super User
-        run: sudo rm /home/azureuser/actions-runner/_work/progig-backend -rf
+        run: sudo rm /home/azureuser/actions-runner/_work/progig-backend/progig-backend/dist -rf
         
       - uses: actions/checkout@v3
 
