@@ -9,10 +9,12 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Switch to Super User
-        run: sudo su
-        
       - uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            .github
+            src
+            libs
 
       - name: Build the Docker image For Production
         if: endsWith(github.ref, '/main')
