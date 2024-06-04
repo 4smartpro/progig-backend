@@ -11,10 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          sparse-checkout: |
-            .github
-            src
-            libs
+          sparse-checkout: .
 
       - name: Build the Docker image For Production
         if: endsWith(github.ref, '/main')
