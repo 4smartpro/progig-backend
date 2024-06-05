@@ -13,12 +13,13 @@ type Chat {
   id: ID!
   lastMessage: Message
   lastMessageId: String
+  receiver: User
   receiverId: String
+  sender: User
   senderId: String
   totalUnseen: Float!
   unseen: Float!
   updatedAt: DateTime!
-  user: User
 }
 
 type ChatsResponse {
