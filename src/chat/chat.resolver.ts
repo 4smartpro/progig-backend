@@ -15,6 +15,7 @@ import { CreateChatInput } from './dto/create-chat.dto';
 import { ChatsResponse } from './dto/chat.dto';
 import { ConversationsResponse } from './dto/message.dto';
 import { PubSub } from 'graphql-subscriptions';
+import { MessageResponse } from './dto/message-added.dto';
 
 const pubSub = new PubSub();
 @Resolver(() => Chat)
@@ -72,14 +73,14 @@ export class ChatResolver {
     });
   }
 
-  @Subscription(() => Message, {
+  @Subscription(() => MessageResponse, {
     filter: (
       payload: { messageAdded: { chatId: string } },
       variables: { chatId: string },
     ) => payload.messageAdded.chatId === variables.chatId,
   })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  messageAdded(@Args('chatId', { type: () => ID }) _chatId: string) {
+  messageAdded(@Args('chatId', { type: () => ID }) chatId: string) {
     return pubSub.asyncIterator('messageAdded');
   }
 

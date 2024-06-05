@@ -10,3 +10,4 @@ export * from './connection.entity';
 export * from './message.entity';
 export * from './saved-gig.entity';
 export * from './content.entity';
+export * from './otp.entity';

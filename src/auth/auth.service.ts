@@ -8,8 +8,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { User } from '@app/common';
+import { OTP, User } from '@app/common';
 import { CreateUserInput } from 'src/user/dto/create-user.dto';
+import * as crypto from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 export interface TokenPayload {
   userId: string;
@@ -19,6 +22,7 @@ export interface TokenPayload {
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(OTP) private readonly otpRepository: Repository<OTP>,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
@@ -96,4 +100,53 @@ export class AuthService {
       throw new BadRequestException(error);
     }
   }
+
+  async forgot(email: string) {
+    const user = await this.userService.findOne(email);
+
+    if (!user) {
+      throw new UnauthorizedException('User does not exists');
+    }
+
+    const otp = crypto.randomInt(100000, 999999);
+
+    const exists = await this.otpRepository.findOne({
+      where: { email },
+    });
+
+    if (exists) {
+      await exists.remove();
+    }
+
+    await this.otpRepository.create({ otp, email }).save();
+
+    return otp;
+  }
+
+  async validateOtp(otp: number, email?: string) {
+    const cond: any = { otp };
+    if (email) cond.email = email;
+    return this.otpRepository.findOne({ where: cond });
+  }
+
+  async resetPassword(otp: number, email: string, password: string) {
+    const isValidOtp = await this.validateOtp(otp, email);
+    // TODO: If expire throw error
+
+    if (isValidOtp) {
+      const user = await this.userService.resetPassword(email, password);
+      return user;
+    } else {
+      throw new BadRequestException('OTP invalid or expired');
+    }
+  }
 }
+
+// function diffMinutes(startDate: Date, endDate: Date) {
+//   // Calculate the difference in milliseconds between the two provided dates and convert it to seconds
+//   let diff = (startDate.getTime() - endDate.getTime()) / 1000;
+//   // Convert the difference from seconds to minutes
+//   diff /= 60;
+//   // Return the absolute value of the rounded difference in minutes
+//   return Math.round(diff);
+// }

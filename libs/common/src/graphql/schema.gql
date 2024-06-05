@@ -13,13 +13,12 @@ type Chat {
   id: ID!
   lastMessage: Message
   lastMessageId: String
-  receiver: User
   receiverId: String
-  sender: User
   senderId: String
   totalUnseen: Float!
   unseen: Float!
   updatedAt: DateTime!
+  user: User
 }
 
 type ChatsResponse {
@@ -186,6 +185,11 @@ type Message {
   updatedAt: DateTime!
 }
 
+type MessageResponse {
+  chat: Chat!
+  message: Message!
+}
+
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
@@ -193,16 +197,19 @@ type Mutation {
   contractUpdate(payload: UpdateContractInput!): Contract!
   createGig(payload: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
+  forgotPassword(email: String!): RegistrationResponse!
   login(email: String!, password: String!): LoginResponse!
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
+  resetPassword(email: String!, otp: Int!, password: String!): RegistrationResponse!
   saveUnsaveGig(gigId: ID): ID
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Message!
   sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(payload: UpdateGigInput!): Gig!
   updateProfile(payload: UpdateUserInput!): User!
+  validateOTP(otp: Int!): Boolean!
 }
 
 type Proposal {
@@ -267,7 +274,7 @@ input SendProposalInput {
 
 type Subscription {
   chatAdded(userId: ID!): Chat!
-  messageAdded(chatId: ID!): Message!
+  messageAdded(chatId: ID!): MessageResponse!
 }
 
 input UpdateContractInput {
