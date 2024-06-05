@@ -90,10 +90,18 @@ export class ChatService {
 
     await chat.save();
 
-    return {
-      message,
-      contact: { ...chat, user: chat.sender ? chat.sender : chat.receiver },
-    };
+    const unread = await this.messageRepository.count({
+      where: { chatId: chat.id, senderId: user.id, seen: false },
+    });
+
+    const findTotalUnseen = await this.findTotalUnseen(payload.receiverId);
+
+    chat.unseen = unread;
+    chat.totalUnseen = findTotalUnseen.unseen;
+
+    console.log(chat);
+
+    return { message, chat };
   }
 
   // async getChats(params: {
@@ -121,37 +129,14 @@ export class ChatService {
     page: number;
     userId: string;
   }): Promise<ChatsResponse> {
-    const query = this.chatRepository
-      .createQueryBuilder('chat')
-      .leftJoinAndSelect('chat.lastMessage', 'lastMessage')
-      .where('chat.senderId = :userId', { userId: params.userId })
-      .orWhere('chat.receiverId = :userId', { userId: params.userId })
-      .skip(params.page ? (params.page - 1) * params.limit : 0)
-      .take(params.limit);
-
-    // Add conditional relations
-    query
-      .leftJoinAndSelect('chat.sender', 'sender', 'chat.senderId != :userId', {
-        userId: params.userId,
-      })
-      .leftJoinAndSelect(
-        'chat.receiver',
-        'receiver',
-        'chat.receiverId != :userId',
-        { userId: params.userId },
-      );
-
-    const [entries, total] = await query.getManyAndCount();
-
-    entries.forEach((e) => {
-      if (e.sender) {
-        e.user = e.sender;
-      } else {
-        e.user = e.receiver;
-      }
-
-      delete e.sender;
-      delete e.receiver;
+    const [entries, total] = await this.chatRepository.findAndCount({
+      where: [{ senderId: params.userId }, { receiverId: params.userId }],
+      skip: params.page ? (params.page - 1) * params.limit : 0,
+      take: params.limit,
+      relations: ['sender', 'receiver', 'lastMessage'],
+      order: {
+        updatedAt: 'DESC',
+      },
     });
 
     return {
@@ -193,6 +178,7 @@ export class ChatService {
       skip: page ? (page - 1) * limit : 0,
       take: limit,
       relations: ['sender'],
+      order: { createdAt: 'DESC' },
     });
 
     return {
@@ -205,12 +191,17 @@ export class ChatService {
     return this.chatRepository.findOne({ where: { id } });
   }
 
-  async markChatAsSeen(chatId: string) {
-    const result = await this.messageRepository.update(
-      { chatId, seen: false },
-      { seen: true },
-    );
-
-    return result;
+  findTotalUnseen(userId: string) {
+    return this.chatRepository
+      .createQueryBuilder('chat')
+      .where({ senderId: userId })
+      .orWhere({ receiverId: userId })
+      .loadRelationCountAndMap(
+        'chat.unseen',
+        'chat.conversations',
+        'message',
+        (query) => query.andWhere(`message.seen = :seen`, { seen: false }),
+      )
+      .getOne();
   }
 }

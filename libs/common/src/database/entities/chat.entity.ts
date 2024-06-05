@@ -52,6 +52,12 @@ export class Chat extends AbstractEntity {
   @OneToOne(() => Message, (s) => s.chat)
   @JoinColumn({ name: 'lastMessageId' })
   lastMessage: Message;
+
+  @Field({ defaultValue: 0 })
+  unseen: number;
+
+  @Field({ defaultValue: 0 })
+  totalUnseen: number;
 }
 
 @ObjectType()

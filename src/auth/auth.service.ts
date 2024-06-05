@@ -134,12 +134,7 @@ export class AuthService {
     // TODO: If expire throw error
 
     if (isValidOtp) {
-      const now = Date.now();
-      const createdAt = isValidOtp.createdAt.toTimeString();
-      console.log(now, createdAt);
-      return;
       const user = await this.userService.resetPassword(email, password);
-      console.log(user);
       return user;
     } else {
       throw new BadRequestException('OTP invalid or expired');
@@ -147,4 +142,11 @@ export class AuthService {
   }
 }
 
-console.log(new Date('05-05-2024'), Date.now())
+// function diffMinutes(startDate: Date, endDate: Date) {
+//   // Calculate the difference in milliseconds between the two provided dates and convert it to seconds
+//   let diff = (startDate.getTime() - endDate.getTime()) / 1000;
+//   // Convert the difference from seconds to minutes
+//   diff /= 60;
+//   // Return the absolute value of the rounded difference in minutes
+//   return Math.round(diff);
+// }

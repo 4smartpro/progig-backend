@@ -90,6 +90,7 @@ export class GigService {
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
       relations: ['contractor', 'proposals'],
+      order: { createdAt: 'DESC' },
     });
 
     return {

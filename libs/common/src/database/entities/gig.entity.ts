@@ -63,6 +63,10 @@ export class Gig extends AbstractEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  paymentType: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   location: string;
 
   @Field({ nullable: true })
