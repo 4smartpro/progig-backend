@@ -8,9 +8,12 @@ import { AuthResolver } from './auth.resolver';
 import { UserService } from 'src/user/user.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { OTP } from '@app/common';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([OTP]),
     UserModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {

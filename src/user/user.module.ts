@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
-import { AzureFilesService, Connection, User } from '@app/common';
+import { AzureFilesService, Connection, OTP, User } from '@app/common';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Connection])],

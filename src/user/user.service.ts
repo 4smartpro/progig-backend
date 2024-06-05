@@ -60,6 +60,17 @@ export class UserService {
     return user;
   }
 
+  async resetPassword(email: string, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) throw new NotFoundException('User does not exists');
+
+    Object.assign(user, { password });
+    await user.save();
+
+    return user;
+  }
+
   async updateProfile(
     user: User,
     updateUserInput: UpdateUserInput,

@@ -1,4 +1,4 @@
-import { Entity, Column, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, Column, BeforeInsert, OneToMany, BeforeUpdate } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { AbstractEntity } from '../abstract.entity';
@@ -88,6 +88,7 @@ export class User extends AbstractEntity {
   savedGigs: SavedGig[];
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
     if (this.password) {
       this.password = await bcrypt.hash(this.password, 10);

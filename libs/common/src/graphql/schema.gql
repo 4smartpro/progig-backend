@@ -193,16 +193,19 @@ type Mutation {
   contractUpdate(payload: UpdateContractInput!): Contract!
   createGig(payload: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
+  forgotPassword(email: String!): RegistrationResponse!
   login(email: String!, password: String!): LoginResponse!
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
   removeGig(id: String!): Gig!
+  resetPassword(email: String!, otp: Int!, password: String!): RegistrationResponse!
   saveUnsaveGig(gigId: ID): ID
   sendConnectionRequest(followingId: ID!): Connection!
   sendMessage(payload: CreateChatInput!): Message!
   sendProposal(payload: SendProposalInput!): Proposal!
   updateGig(payload: UpdateGigInput!): Gig!
   updateProfile(payload: UpdateUserInput!): User!
+  validateOTP(otp: Int!): Boolean!
 }
 
 type Proposal {
