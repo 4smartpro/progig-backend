@@ -18,3 +18,12 @@ export class RegistrationResponse {
   @Field()
   user: User;
 }
+
+@ObjectType()
+export class ForgotPasswordResponse {
+  @Field()
+  message: string;
+
+  @Field()
+  otp: string;
+}

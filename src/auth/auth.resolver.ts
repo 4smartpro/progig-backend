@@ -1,5 +1,9 @@
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
-import { LoginResponse, RegistrationResponse } from './dto/auth-response.dto';
+import {
+  ForgotPasswordResponse,
+  LoginResponse,
+  RegistrationResponse,
+} from './dto/auth-response.dto';
 import { AuthService } from './auth.service';
 import { CreateUserInput } from 'src/user/dto/create-user.dto';
 @Resolver('Auth')
@@ -24,14 +28,13 @@ export class AuthResolver {
     };
   }
 
-  @Mutation(() => RegistrationResponse)
+  @Mutation(() => ForgotPasswordResponse)
   async forgotPassword(@Args('email') email: string) {
     const otp = await this.authService.forgot(email);
 
-    console.log(otp);
-
     return {
       message: 'OTP sent successfully',
+      otp,
     };
   }
 
@@ -41,7 +44,7 @@ export class AuthResolver {
     @Args('password') password: string,
     @Args('email') email: string,
   ) {
-    const result = await this.authService.resetPassword(otp, email, password);
+    await this.authService.resetPassword(otp, email, password);
 
     return {
       message: 'Password reset successful!',

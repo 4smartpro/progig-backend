@@ -138,6 +138,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type ForgotPasswordResponse {
+  message: String!
+  otp: String!
+}
+
 type Gig {
   budget: Float
   contractor: User
@@ -198,7 +203,7 @@ type Mutation {
   contractUpdate(payload: UpdateContractInput!): Contract!
   createGig(payload: CreateGigInput!): Gig!
   deleteConnectionRequest(id: ID!): String!
-  forgotPassword(email: String!): RegistrationResponse!
+  forgotPassword(email: String!): ForgotPasswordResponse!
   login(email: String!, password: String!): LoginResponse!
   register(payload: CreateUserInput!): RegistrationResponse!
   rejectProposal(id: ID!): Proposal!
