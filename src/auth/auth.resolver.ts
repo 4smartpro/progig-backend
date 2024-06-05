@@ -34,7 +34,7 @@ export class AuthResolver {
 
     return {
       message: 'OTP sent successfully',
-      otp,
+      otp, // TODO: otp should not send to frontend. It should send through email
     };
   }
 
