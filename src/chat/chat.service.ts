@@ -91,6 +91,9 @@ export class ChatService {
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
       relations: ['sender', 'receiver', 'lastMessage'],
+      order: {
+        updatedAt: 'DESC',
+      },
     });
 
     return {
