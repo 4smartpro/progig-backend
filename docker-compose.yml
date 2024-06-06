@@ -15,11 +15,11 @@ services:
       - .:/usr/src/app:rw
       - /usr/src/app/node_modules
 
-  postgres:
-    image: 'postgres:13'
-    container_name: progig-postgres
-    ports:
-      - '5432:5432'
-    env_file: /home/azureuser/environments/.env
-    volumes:
-      - /home/azureuser/appdata/postgres:/var/lib/postgresql/data/:rw
+  # postgres:
+  #   image: 'postgres:13'
+  #   container_name: progig-postgres
+  #   ports:
+  #     - '5432:5432'
+  #   env_file: /home/azureuser/environments/.env
+  #   volumes:
+  #     - /home/azureuser/appdata/postgres:/var/lib/postgresql/data/:rw
