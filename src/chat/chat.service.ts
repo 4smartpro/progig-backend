@@ -54,8 +54,6 @@ export class ChatService {
       relations: ['sender', 'receiver'],
     });
 
-    console.log(chat);
-
     if (!chat) {
       const receiver = await this.userService.getUserById(payload.receiverId);
       chat = await this.chatRepository
@@ -99,29 +97,8 @@ export class ChatService {
     chat.unseen = unread;
     chat.totalUnseen = findTotalUnseen.unseen;
 
-    console.log(chat);
-
     return { message, chat };
   }
-
-  // async getChats(params: {
-  //   searchText: string;
-  //   limit: number;
-  //   page: number;
-  //   userId: string;
-  // }): Promise<ChatsResponse> {
-  //   const [entries, total] = await this.chatRepository.findAndCount({
-  //     where: [{ senderId: params.userId }, { receiverId: params.userId }],
-  //     skip: params.page ? (params.page - 1) * params.limit : 0,
-  //     take: params.limit,
-  //     relations: ['sender', 'receiver', 'lastMessage'],
-  //   });
-
-  //   return {
-  //     entries,
-  //     total,
-  //   };
-  // }
 
   async getChats(params: {
     searchText: string;
