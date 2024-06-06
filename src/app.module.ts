@@ -27,7 +27,7 @@ import { ContractModule } from './contract/contract.module';
       }),
       envFilePath: '.env',
     }),
-    DatabaseModule.switchMySQL(),
+    DatabaseModule,
     GraphQLModule,
     AuthModule,
     UserModule,
