@@ -24,35 +24,35 @@ export class ChatService {
   ) {}
 
   async sendMessage({ file, ...payload }: CreateChatInput, user: User) {
-    let chat = await this.chatRepository
-      .createQueryBuilder('chat')
-      .leftJoinAndSelect('chat.lastMessage', 'lastMessage')
-      .where('chat.senderId = :senderId AND chat.receiverId = :receiverId', {
-        senderId: user.id,
-        receiverId: payload.receiverId,
-      })
-      .orWhere('chat.senderId = :senderId AND chat.receiverId = :receiverId', {
-        senderId: payload.receiverId,
-        receiverId: user.id,
-      })
-      .leftJoinAndSelect('chat.sender', 'sender', 'chat.senderId != :userId', {
-        userId: user.id,
-      })
-      .leftJoinAndSelect(
-        'chat.receiver',
-        'receiver',
-        'chat.receiverId != :userId',
-        { userId: user.id },
-      )
-      .getOne();
+    // let chat = await this.chatRepository
+    //   .createQueryBuilder('chat')
+    //   .leftJoinAndSelect('chat.lastMessage', 'lastMessage')
+    //   .where('chat.senderId = :senderId AND chat.receiverId = :receiverId', {
+    //     senderId: user.id,
+    //     receiverId: payload.receiverId,
+    //   })
+    //   .orWhere('chat.senderId = :senderId AND chat.receiverId = :receiverId', {
+    //     senderId: payload.receiverId,
+    //     receiverId: user.id,
+    //   })
+    //   .leftJoinAndSelect('chat.sender', 'sender', 'chat.senderId != :userId', {
+    //     userId: user.id,
+    //   })
+    //   .leftJoinAndSelect(
+    //     'chat.receiver',
+    //     'receiver',
+    //     'chat.receiverId != :userId',
+    //     { userId: user.id },
+    //   )
+    //   .getOne();
 
-    // let chat = await this.chatRepository.findOne({
-    //   where: [
-    //     { senderId: user.id, receiverId: payload.receiverId },
-    //     { senderId: payload.receiverId, receiverId: user.id },
-    //   ],
-    //   relations: ['sender', 'receiver'],
-    // });
+    let chat = await this.chatRepository.findOne({
+      where: [
+        { senderId: user.id, receiverId: payload.receiverId },
+        { senderId: payload.receiverId, receiverId: user.id },
+      ],
+      relations: ['sender', 'receiver'],
+    });
 
     console.log(chat);
 
