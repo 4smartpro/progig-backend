@@ -82,11 +82,13 @@ export class GigService {
     if (params.contractorId) {
       where['contractorId'] = params.contractorId;
     }
+
+    if (params.searchText) {
+      where['description'] = ILike(`%${params.searchText}%`);
+    }
+
     const [entries, total] = await this.gigRepository.findAndCount({
-      where: {
-        description: ILike(`%${params.searchText}%`),
-        ...where,
-      },
+      where,
       skip: params.page ? (params.page - 1) * params.limit : 0,
       take: params.limit,
       relations: ['contractor', 'proposals'],
