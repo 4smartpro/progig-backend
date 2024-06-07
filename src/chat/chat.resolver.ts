@@ -73,7 +73,7 @@ export class ChatResolver {
     });
   }
 
-  @Subscription(() => MessageResponse, {
+  @Subscription(() => Message, {
     filter: (
       payload: { messageAdded: { chatId: string } },
       variables: { chatId: string },

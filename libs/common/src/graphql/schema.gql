@@ -191,11 +191,6 @@ type Message {
   updatedAt: DateTime!
 }
 
-type MessageResponse {
-  chat: Chat!
-  message: Message!
-}
-
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
@@ -280,7 +275,7 @@ input SendProposalInput {
 
 type Subscription {
   chatAdded(userId: ID!): Chat!
-  messageAdded(chatId: ID!): MessageResponse!
+  messageAdded(chatId: ID!): Message!
 }
 
 input UpdateContractInput {
