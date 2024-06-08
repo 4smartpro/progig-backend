@@ -20,7 +20,10 @@ import { ContractModule } from './contract/contract.module';
         JWT_EXPIRES_IN: Joi.number().required(),
         AZURE_CONNECTION_STRING: Joi.string().required(),
       }),
-      envFilePath: '.env',
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? '.env.production'
+          : '.env.development',
     }),
     DatabaseModule,
     GraphQLModule,

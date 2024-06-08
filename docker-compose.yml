@@ -3,7 +3,7 @@ services:
   backend:
     build:
       context: .
-      target: development
+      target: production
     command: npm run start:dev
     container_name: progig-backend
     env_file: /home/azureuser/environments/.env.production
