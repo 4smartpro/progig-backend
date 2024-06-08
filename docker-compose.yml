@@ -7,7 +7,7 @@ services:
     container_name: progig-backend
     env_file: /home/azureuser/environments/.env.production
     ports:
-      - '80:3010'
+      - '80:3000'
     volumes:
       - .:/usr/src/app:rw
       - /usr/src/app/node_modules
