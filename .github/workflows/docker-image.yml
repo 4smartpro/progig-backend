@@ -16,11 +16,11 @@ jobs:
 
       - name: Build the Docker image For Production
         if: endsWith(github.ref, '/main')
-        run: docker-compose up --build -V -d
+        run: docker-compose up -d --build -d
 
       - name: Build the Docker image For Development
         if: endsWith(github.ref, '/develop')
-        run: docker-compose -f docker-compose.dev.yml up --build -V -d
+        run: docker-compose -f docker-compose.dev.yml up -d --build
 
       - name: Remove Intermadiate Images
         run: docker images -q -f "dangling=true" | xargs -r docker rmi -f
