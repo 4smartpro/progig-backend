@@ -4,7 +4,7 @@ services:
     build:
       context: .
     command: npm run start:dev
-    container_name: progig-backend
+    container_name: progig-backend-dev
     env_file: /home/azureuser/environments/.env.development
     ports:
       - '3010:3010'
