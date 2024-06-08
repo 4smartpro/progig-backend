@@ -2,7 +2,7 @@ name: Docker Image CI PUBLISH
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ['main', 'develop']
 
 jobs:
   build:
@@ -11,18 +11,16 @@ jobs:
     steps:
       - name: Switch to Super User
         run: sudo rm /home/azureuser/actions-runner/_work/progig-backend/progig-backend/dist -rf
-        
+
       - uses: actions/checkout@v3
 
       - name: Build the Docker image For Production
         if: endsWith(github.ref, '/main')
         run: docker-compose up --build -V -d
-          
 
       - name: Build the Docker image For Development
         if: endsWith(github.ref, '/develop')
-        # run: docker-compose -f docker-compose.dev.yml up --build -d
-        run: docker-compose up --build -V -d
+        run: docker-compose -f docker-compose.dev.yml up --build -V -d
 
       - name: Remove Intermadiate Images
         run: docker images -q -f "dangling=true" | xargs -r docker rmi -f

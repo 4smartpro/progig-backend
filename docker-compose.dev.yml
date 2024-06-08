@@ -6,9 +6,9 @@ services:
       target: development
     command: npm run start:dev
     container_name: progig-backend
-    env_file: /home/azureuser/environments/.env.production
+    env_file: /home/azureuser/environments/.env.development
     ports:
-      - '80:3010'
+      - '3010:3010'
     volumes:
       - .:/usr/src/app:rw
       - /usr/src/app/node_modules
