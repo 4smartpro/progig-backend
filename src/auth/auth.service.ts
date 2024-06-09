@@ -13,7 +13,6 @@ import { CreateUserInput } from 'src/user/dto/create-user.dto';
 import * as crypto from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MailerService } from '@nestjs-modules/mailer';
 
 export interface TokenPayload {
   userId: string;
