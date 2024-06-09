@@ -9,7 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OTP } from '@app/common';
+import { MailService, OTP } from '@app/common';
 
 @Module({
   imports: [
@@ -34,6 +34,7 @@ import { OTP } from '@app/common';
     UserService,
     LocalStrategy,
     JwtStrategy,
+    MailService,
   ],
 })
 export class AuthModule {}

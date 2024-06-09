@@ -8,11 +8,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { OTP, User } from '@app/common';
+import { MailService, OTP, User } from '@app/common';
 import { CreateUserInput } from 'src/user/dto/create-user.dto';
 import * as crypto from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
 
 export interface TokenPayload {
   userId: string;
@@ -26,6 +27,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly mailService: MailService,
   ) {}
 
   async generateJwt(user: User) {
@@ -119,6 +121,20 @@ export class AuthService {
     }
 
     await this.otpRepository.create({ otp, email }).save();
+
+    this.mailService.sendMail({
+      to: email,
+      subject: `Forgot Password | ProGig`,
+      html: `
+      Dear User,
+      <br/><br/>
+      Please use this OTP to reset your password
+      <br/><br/>
+      <h1>${otp}</h1>
+      <br/><br/>
+      
+      `,
+    });
 
     return otp;
   }

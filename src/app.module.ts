@@ -19,6 +19,7 @@ import { ContractModule } from './contract/contract.module';
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.number().required(),
         AZURE_CONNECTION_STRING: Joi.string().required(),
+        COMMUNICATION_SERVICES_CONNECTION_STRING: Joi.string().required(),
       }),
       envFilePath:
         process.env.NODE_ENV === 'production'

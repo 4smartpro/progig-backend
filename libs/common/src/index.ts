@@ -14,3 +14,4 @@ export * from './scalar/upload.scalar';
 // Services
 export * from './azure/azure.file.service';
 export * from './azure/azure.module';
+export * from './azure/mail.service';

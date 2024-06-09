@@ -33,7 +33,7 @@ export class AuthResolver {
     const otp = await this.authService.forgot(email);
 
     return {
-      message: 'OTP sent successfully',
+      message: `An OTP sent to your email ${email} successfully`,
       otp, // TODO: otp should not send to frontend. It should send through email
     };
   }
