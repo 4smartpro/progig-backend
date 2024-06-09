@@ -88,7 +88,6 @@ export class User extends AbstractEntity {
   savedGigs: SavedGig[];
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
     if (this.password) {
       this.password = await bcrypt.hash(this.password, 10);
