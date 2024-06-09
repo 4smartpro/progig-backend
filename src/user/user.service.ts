@@ -65,7 +65,8 @@ export class UserService {
 
     if (!user) throw new NotFoundException('User does not exists');
 
-    Object.assign(user, { password });
+    user.password = user.hashPassword(password);
+
     await user.save();
 
     return user;
