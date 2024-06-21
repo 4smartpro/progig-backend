@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.development
-    command: npm run start:dev
+    command: npm run start:prod
     container_name: progig-backend-dev
     env_file: /home/azureuser/environments/.env.development
     ports:
