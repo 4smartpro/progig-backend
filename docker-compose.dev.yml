@@ -10,5 +10,4 @@ services:
     ports:
       - '3010:3010'
     volumes:
-      - .:/usr/src/app:rw
       - /usr/src/app/node_modules
