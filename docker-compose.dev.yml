@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command: npm run start:dev
+    container_name: progig-backend-dev
+    env_file: /home/azureuser/environments/.env.development
+    ports:
+      - '3010:3010'
+    volumes:
+      - .:/usr/src/app:rw
+      - /usr/src/app/node_modules

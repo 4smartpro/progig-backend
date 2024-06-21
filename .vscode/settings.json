@@ -1,0 +1,8 @@
+{
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/ac90a878-1251-4229-9485-9f00f29c0b16/resourceGroups/SVResource/providers/Microsoft.Web/sites/progig-backend",
+  "appService.deploySubpath": "."
+}
