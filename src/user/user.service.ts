@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Connection, User } from '@app/common';
 
@@ -11,6 +12,7 @@ import { UsersResponse } from './dto/user.dto';
 import { FindUserParams } from './dto/find-user.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
 import { CreateUserInput } from './dto/create-user.dto';
+import { ChangePasswordInput } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -30,8 +32,16 @@ export class UserService {
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  createUser(createUserDto: CreateUserInput): Promise<User> {
-    return this.userRepository.create(createUserDto).save();
+  async createUser(payload: CreateUserInput): Promise<User> {
+    const exists = await this.userRepository.findOne({
+      where: { email: payload.email },
+    });
+
+    if (exists) {
+      throw new BadRequestException('This email already exists');
+    }
+
+    return this.userRepository.create(payload).save();
   }
 
   async updateUser(
@@ -92,6 +102,20 @@ export class UserService {
     await user.save();
 
     return user;
+  }
+
+  async changePassword(
+    user: User,
+    payload: ChangePasswordInput,
+  ): Promise<string> {
+    if (!user.isPasswordMatched(payload.oldPassword)) {
+      throw new UnauthorizedException('Old password does not match');
+    }
+
+    user.password = user.hashPassword(payload.newPassword);
+    await user.save();
+
+    return 'Password successfully changed';
   }
 
   async findOne(email: string): Promise<User> {

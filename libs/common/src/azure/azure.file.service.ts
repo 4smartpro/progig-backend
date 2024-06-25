@@ -30,6 +30,7 @@ export class AzureFilesService {
     if (containerName) this.containerName = containerName;
 
     const file = await _file;
+
     const extension = file.filename.split('.').pop();
     const file_name = crypto.randomUUID() + '.' + extension;
     const blockBlobClient = await this.getBlobClient(file_name);

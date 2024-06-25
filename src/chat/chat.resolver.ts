@@ -28,7 +28,6 @@ export class ChatResolver {
     @Args('payload') payload: CreateChatInput,
     @CurrentUser() user: User,
   ) {
-    console.log(user.id, payload.receiverId);
     const { message, chat } = await this.chatService.sendMessage(payload, user);
 
     pubSub.publish('messageAdded', { messageAdded: message });

@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '@auth/guards';
 import { AzureFilesService, CurrentUser, User, UserRole } from '@app/common';
 import { UsersResponse } from './dto/user.dto';
 import { UpdateUserInput } from './dto/update-user.dto';
+import { ChangePasswordInput } from './dto/change-password.dto';
 
 @Resolver()
 export class UserResolver {
@@ -76,5 +77,14 @@ export class UserResolver {
     }
 
     return this.userService.updateProfile(user, payload);
+  }
+
+  @Mutation(() => String)
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @Args('payload') payload: ChangePasswordInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.userService.changePassword(user, payload);
   }
 }

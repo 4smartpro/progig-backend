@@ -7,6 +7,11 @@ type AcceptProposalResponse {
   proposal: Proposal!
 }
 
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
 type Chat {
   conversations: [Message!]!
   createdAt: DateTime!
@@ -194,6 +199,7 @@ type Message {
 type Mutation {
   acceptConnectionRequest(id: ID!): Connection!
   acceptProposal(id: ID!): AcceptProposalResponse!
+  changePassword(payload: ChangePasswordInput!): String!
   contractRemove(id: String): Contract!
   contractUpdate(payload: UpdateContractInput!): Contract!
   createGig(payload: CreateGigInput!): Gig!
